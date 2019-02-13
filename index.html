@@ -138,7 +138,8 @@
 	</header>
 	<div class="entry-content">
 		
-			<h1 id="kotlin-dsl-是什么？"><a href="#kotlin-dsl-是什么？" class="headerlink" title="kotlin-dsl 是什么？"></a>kotlin-dsl 是什么？</h1><h1 id="为什么要迁移？"><a href="#为什么要迁移？" class="headerlink" title="为什么要迁移？"></a>为什么要迁移？</h1><p>因为Groovy是动态语言，在用作Android构建脚本的时候，经常有些问题：</p>
+			<p>网上已经有不少关于 Kotlin-DSL 很好的文章，但并未能完全解答我迁移过程中遇到的疑问。通过查阅各类文档和源码，我找到了想要的答案。这篇文章记录了我的迁移过程以及对各类问题追溯到源头的答案。</p>
+<h1 id="为什么要迁移？"><a href="#为什么要迁移？" class="headerlink" title="为什么要迁移？"></a>为什么要迁移？</h1><p>因为 Groovy 是动态语言，在用作 Android 构建脚本的时候，经常有些问题：</p>
 <ul>
 <li>很差的IDE支持(自动提示等)</li>
 <li>性能问题</li>
@@ -146,7 +147,7 @@
 <li>难以debug</li>
 <li>重构很麻烦<br><br>…</li>
 </ul>
-<p>kotlin 并非动态语言，但却兼具了Groovy的灵活性和静态语言的特点，很大程度上解决了上面的问题。</p>
+<p>kotlin 并非动态语言，但却兼具了 Groovy 的灵活性和静态语言的特点，是一种类型安全的 DSL，很大程度上解决了上述的问题。</p>
 <p>所以，开始吧！！<br>
 			
 				</p><p class="article-more-link">
