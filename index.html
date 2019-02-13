@@ -21,6 +21,18 @@
   <link rel="stylesheet" href="/css/style.css">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-134333276-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
 </head></html>
 <body>
   <div id="container">
@@ -88,7 +100,69 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
+    <article id="post-Android 构建脚本从Groovy迁移到Kotlin DSL" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2019/02/01/Android 构建脚本从Groovy迁移到Kotlin DSL/" class="article-date">
+  <time datetime="2019-01-31T16:00:00.000Z" itemprop="datePublished">2019-02-01</time>
+</a>
+		</span>
+		<span class="meta-elements author">Xio</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2019/02/01/Android 构建脚本从Groovy迁移到Kotlin DSL/">Android 构建脚本从Groovy迁移到Kotlin DSL</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+			<h1 id="kotlin-dsl-是什么？"><a href="#kotlin-dsl-是什么？" class="headerlink" title="kotlin-dsl 是什么？"></a>kotlin-dsl 是什么？</h1><h1 id="为什么要迁移？"><a href="#为什么要迁移？" class="headerlink" title="为什么要迁移？"></a>为什么要迁移？</h1><p>因为Groovy是动态语言，在用作Android构建脚本的时候，经常有些问题：</p>
+<ul>
+<li>很差的IDE支持(自动提示等)</li>
+<li>性能问题</li>
+<li>很多错误在<code>build</code>时才报出，而不是编译期</li>
+<li>难以debug</li>
+<li>重构很麻烦<br><br>…</li>
+</ul>
+<p>kotlin 并非动态语言，但却兼具了Groovy的灵活性和静态语言的特点，很大程度上解决了上面的问题。</p>
+<p>所以，开始吧！！<br>
+			
+				</p><p class="article-more-link">
+					<a href="/2019/02/01/Android 构建脚本从Groovy迁移到Kotlin DSL/#more">继续阅读</a>
+				</p>
+      
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kotlin/">Kotlin</a></li></ul>
 
 			</span>
 		</div>
