@@ -3,19 +3,19 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Android 构建脚本从Groovy迁移到Kotlin DSL | Eden</title>
+  <title>Android 构建脚本从 Groovy 迁移到 Kotlin DSL | Eden</title>
   <meta name="viewport" content="width=device-width">
   <meta name="description" content="网上已经有不少关于 Kotlin-DSL 很好的文章，但并未能完全解答我迁移过程中遇到的疑问。通过查阅各类文档和源码，我找到了想要的答案。这篇文章记录了我的迁移过程以及对各类问题追溯到源头的答案。 为什么要迁移？因为 Groovy 是动态语言，在用作 Android 构建脚本的时候，经常有些问题：  很差的IDE支持(自动提示等) 性能问题 很多错误在build时才报出，而不是编译期 难以debu">
 <meta name="keywords" content="Android,Kotlin">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android 构建脚本从Groovy迁移到Kotlin DSL">
+<meta property="og:title" content="Android 构建脚本从 Groovy 迁移到 Kotlin DSL">
 <meta property="og:url" content="http://yoursite.com/2019/02/01/Android 构建脚本从Groovy迁移到Kotlin DSL/index.html">
 <meta property="og:site_name" content="Eden">
 <meta property="og:description" content="网上已经有不少关于 Kotlin-DSL 很好的文章，但并未能完全解答我迁移过程中遇到的疑问。通过查阅各类文档和源码，我找到了想要的答案。这篇文章记录了我的迁移过程以及对各类问题追溯到源头的答案。 为什么要迁移？因为 Groovy 是动态语言，在用作 Android 构建脚本的时候，经常有些问题：  很差的IDE支持(自动提示等) 性能问题 很多错误在build时才报出，而不是编译期 难以debu">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2019-02-13T07:10:11.943Z">
+<meta property="og:updated_time" content="2019-02-13T07:28:49.891Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android 构建脚本从Groovy迁移到Kotlin DSL">
+<meta name="twitter:title" content="Android 构建脚本从 Groovy 迁移到 Kotlin DSL">
 <meta name="twitter:description" content="网上已经有不少关于 Kotlin-DSL 很好的文章，但并未能完全解答我迁移过程中遇到的疑问。通过查阅各类文档和源码，我找到了想要的答案。这篇文章记录了我的迁移过程以及对各类问题追溯到源头的答案。 为什么要迁移？因为 Groovy 是动态语言，在用作 Android 构建脚本的时候，经常有些问题：  很差的IDE支持(自动提示等) 性能问题 很多错误在build时才报出，而不是编译期 难以debu">
   
     <link rel="alternative" href="/atom.xml" title="Eden" type="application/atom+xml">
@@ -77,7 +77,7 @@
 		
   
     <h1 class="article-title entry-title" itemprop="name">
-      Android 构建脚本从Groovy迁移到Kotlin DSL
+      Android 构建脚本从 Groovy 迁移到 Kotlin DSL
     </h1>
   
 
@@ -204,15 +204,15 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/02/12/Python IO - 输出重定向/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
+  
+    <a href="/2018/12/12/Python IO - 输出重定向/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">
         
           Python IO - 输出重定向
         
       </div>
     </a>
-  
   
 </nav>
 
