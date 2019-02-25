@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="Eden">
 <meta property="og:description" content="之前看 Thinking in Java 的时候自认为理解了 Java 中的多态性和方法动态绑定，直到看到下面这个栗子： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647class A &amp;#123;    public String show(D obj) &amp;#123;">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2019-02-24T14:42:43.377Z">
+<meta property="og:updated_time" content="2019-02-24T16:55:40.012Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于 Java 多态（Polymorphism）">
 <meta name="twitter:description" content="之前看 Thinking in Java 的时候自认为理解了 Java 中的多态性和方法动态绑定，直到看到下面这个栗子： 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647class A &amp;#123;    public String show(D obj) &amp;#123;">
@@ -86,7 +86,7 @@
 		
     	<p>之前看 <em>Thinking in Java</em> 的时候自认为理解了 Java 中的多态性和方法动态绑定，直到看到下面这个栗子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">    public String show(D obj) &#123;</span><br><span class="line">        return (&quot;A and D&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;A and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A &#123;</span><br><span class="line">    public String show(B obj) &#123;</span><br><span class="line">        return (&quot;B and B&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;B and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class C extends B &#123; &#125;</span><br><span class="line"></span><br><span class="line">class D extends B &#123; &#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">        A a1 = new A();</span><br><span class="line">        A a2 = new B();</span><br><span class="line">        B b = new B();</span><br><span class="line">        C c = new C();</span><br><span class="line">        D d = new D();</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;1--&quot; + a1.show(b));</span><br><span class="line">        System.out.println(&quot;2--&quot; + a1.show(c));</span><br><span class="line">        System.out.println(&quot;3--&quot; + a1.show(d));</span><br><span class="line">        System.out.println(&quot;4--&quot; + a2.show(b));</span><br><span class="line">        System.out.println(&quot;5--&quot; + a2.show(c));</span><br><span class="line">        System.out.println(&quot;6--&quot; + a2.show(d));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 1--A and A</span><br><span class="line">     * 2--A and A</span><br><span class="line">     * 3--A and D</span><br><span class="line">     * 4--B and A</span><br><span class="line">     * 5--B and A</span><br><span class="line">     * 6--A and D</span><br><span class="line">     */</span><br></pre></td></tr></table></figure>
-<p>最后的输出中，前三条是毫无疑问的，从第四条开始好像就不太符合我们直觉了，<code>a2</code>的实际类型是<code>B</code>, <code>a2.show(b)</code>调用的不应该是<code>B.show(B obj)</code>这个方法吗，为什么会调用<code>B.show(A obj)</code>方法呢？<br><a id="more"></a></p>
+<p>最后的输出中，前三条是毫无疑问的，从第四条开始好像就不太符合我们直觉了，<code>a2</code>的实际类型是<code>B</code>, <code>a2.show(b)</code>调用的不应该是<code>B.show(B)</code>这个方法吗，为什么会调用<code>B.show(A)</code>方法呢？<br><a id="more"></a></p>
 <p>这涉及到重载和重写在 JVM 中的实现，是 Java 多态性的基本体现。通过两个例子来分别说明：</p>
 <h3 id="重载-Overload-–-重载解析-overload-resolution"><a href="#重载-Overload-–-重载解析-overload-resolution" class="headerlink" title="重载(Overload) – 重载解析 (overload resolution)"></a>重载(Overload) – 重载解析 (overload resolution)</h3><blockquote>
 <p>在国内的文档中，这常被称为”静态分派”</p>
@@ -133,11 +133,11 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/12/12/Python IO - 输出重定向/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/08/18/Android 蓝牙开发 ᚼᛒ（一）/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Python IO - 输出重定向
+          Android 蓝牙开发 ᚼᛒ (一)
         
       </div>
     </a>

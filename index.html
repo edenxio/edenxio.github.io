@@ -91,9 +91,9 @@
 <li>重构很麻烦<br><br>…</li>
 </ul>
 <p>kotlin 并非动态语言，但却兼具了 Groovy 的灵活性和静态语言的特点，是一种类型安全的 DSL，很大程度上解决了上述的问题。</p>
-<p>所以，开始吧！！<br>
+<p>所以，开始吧！！<br></p>
 			
-				</p><p class="article-more-link">
+				<p class="article-more-link">
 					<a href="/2019/02/01/Android 构建脚本从Groovy迁移到Kotlin DSL/#more">继续阅读</a>
 				</p>
       
@@ -177,6 +177,68 @@
 
 
   
+    <article id="post-Android 蓝牙开发 ᚼᛒ（一）" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2018/08/18/Android 蓝牙开发 ᚼᛒ（一）/" class="article-date">
+  <time datetime="2018-08-17T16:00:00.000Z" itemprop="datePublished">2018-08-18</time>
+</a>
+		</span>
+		<span class="meta-elements author">Xio</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2018/08/18/Android 蓝牙开发 ᚼᛒ（一）/">Android 蓝牙开发 ᚼᛒ (一)</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+			<p>接触 Android 蓝牙开发已经有一段时间了，Android 官方文档虽然对蓝牙 API 介绍很详尽，但是对蓝牙协议不太了解的开发人员来说还是不足以建立一个系统的认识，当时和硬件组的小伙伴交流的时候这点带来的问题就特别明显。网上的资料少，并且良莠不齐，于是去 SIG 官网找了协议文档（七大卷，真的厚…)，查阅之后，厘清了很多概念，大致了解了整个系统轮廓。</p>
+<p>接下来会从蓝牙协议和 Android 蓝牙开发这两部分来叙述。</p>
+<p>这是第一篇，蓝牙协议。</p>
+<h2 id="什么是蓝牙"><a href="#什么是蓝牙" class="headerlink" title="什么是蓝牙"></a>什么是蓝牙</h2><p>蓝牙是一种短距离的短波无线通信技术，目前主要分为<strong>基础率/增强数据率（BR / EDR</strong>）和<strong>低功耗（LE）</strong>两个版本，前者通常也称为<strong>经典版蓝牙</strong>。</p>
+<p>关于蓝牙这个名称的由来，蓝牙的发展历史及各版本的比对等基本信息在<a href="https://zh.wikipedia.org/wiki/%E8%97%8D%E7%89%99" target="_blank" rel="noopener">蓝牙的维基百科词条</a>上写得很详细，就不再赘述。</p>
+<h2 id="蓝牙的架构"><a href="#蓝牙的架构" class="headerlink" title="蓝牙的架构"></a>蓝牙的架构</h2><p>蓝牙4.0是一个综合协议规范，它除了提出了新的 LE 规范，还囊括了 BR / EDR 规范，并在实际使用中分为了单模(Single mode)和双模(Dual mode)版本，前者仅支持 LE 规范且不能和蓝牙4.0之前的版本通信，后者同时支持 LE 和 BR / EDR 规范，并且兼容旧版蓝牙。</p>
+<blockquote>
+<p>本文关于蓝牙协议栈的分析均基于蓝牙4.1</p>
+</blockquote>
+<p>下图是根据蓝牙 4.1 核心技术栈及部分应用协议绘制的蓝牙协议栈示意图<br><img src="https://docs.google.com/drawings/d/e/2PACX-1vSPsBu4C99TXGRhrGDNB-XbGeaFb76966Zol_ZcCwRI0QUSI19fwi0GMbcLHMDLEMwKuBAXVUBtY3bP/pub?w=542&amp;h=510" alt="蓝牙协议栈"><br>*<em>上图仅供参考，详细架构图参见 <a href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=282159" target="_blank" rel="noopener">SIG 蓝牙协议文档</a></em><br></p>
+			
+				<p class="article-more-link">
+					<a href="/2018/08/18/Android 蓝牙开发 ᚼᛒ（一）/#more">继续阅读</a>
+				</p>
+      
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bluetooth/">Bluetooth</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-深入 Java 多态" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -203,9 +265,9 @@
 		
 			<p>之前看 <em>Thinking in Java</em> 的时候自认为理解了 Java 中的多态性和方法动态绑定，直到看到下面这个栗子：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">    public String show(D obj) &#123;</span><br><span class="line">        return (&quot;A and D&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;A and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A &#123;</span><br><span class="line">    public String show(B obj) &#123;</span><br><span class="line">        return (&quot;B and B&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;B and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class C extends B &#123; &#125;</span><br><span class="line"></span><br><span class="line">class D extends B &#123; &#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">        A a1 = new A();</span><br><span class="line">        A a2 = new B();</span><br><span class="line">        B b = new B();</span><br><span class="line">        C c = new C();</span><br><span class="line">        D d = new D();</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;1--&quot; + a1.show(b));</span><br><span class="line">        System.out.println(&quot;2--&quot; + a1.show(c));</span><br><span class="line">        System.out.println(&quot;3--&quot; + a1.show(d));</span><br><span class="line">        System.out.println(&quot;4--&quot; + a2.show(b));</span><br><span class="line">        System.out.println(&quot;5--&quot; + a2.show(c));</span><br><span class="line">        System.out.println(&quot;6--&quot; + a2.show(d));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 1--A and A</span><br><span class="line">     * 2--A and A</span><br><span class="line">     * 3--A and D</span><br><span class="line">     * 4--B and A</span><br><span class="line">     * 5--B and A</span><br><span class="line">     * 6--A and D</span><br><span class="line">     */</span><br></pre></td></tr></table></figure>
-<p>最后的输出中，前三条是毫无疑问的，从第四条开始好像就不太符合我们直觉了，<code>a2</code>的实际类型是<code>B</code>, <code>a2.show(b)</code>调用的不应该是<code>B.show(B obj)</code>这个方法吗，为什么会调用<code>B.show(A obj)</code>方法呢？<br>
+<p>最后的输出中，前三条是毫无疑问的，从第四条开始好像就不太符合我们直觉了，<code>a2</code>的实际类型是<code>B</code>, <code>a2.show(b)</code>调用的不应该是<code>B.show(B)</code>这个方法吗，为什么会调用<code>B.show(A)</code>方法呢？<br></p>
 			
-				</p><p class="article-more-link">
+				<p class="article-more-link">
 					<a href="/2018/06/09/深入 Java 多态/#more">继续阅读</a>
 				</p>
       

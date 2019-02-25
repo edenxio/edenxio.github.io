@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Android 蓝牙开发 ᚼᛒ (一) | Eden</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="接触 Android 蓝牙开发已经有一段时间了，Android 官方文档虽然对蓝牙 API 介绍很详尽，但是对蓝牙协议不太了解的开发人员来说还是不足以建立一个系统的认识，当时和硬件组的小伙伴交流的时候这点带来的问题就特别明显。网上的资料少，并且良莠不齐，于是去 SIG 官网找了协议文档（七大卷，真的厚…)，查阅之后，厘清了很多概念，大致了解了整个系统轮廓。 接下来会从蓝牙协议和 Android 蓝">
+<meta name="keywords" content="Android,Bluetooth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 蓝牙开发 ᚼᛒ (一)">
+<meta property="og:url" content="http://yoursite.com/2018/08/18/Android 蓝牙开发 ᚼᛒ（一）/index.html">
+<meta property="og:site_name" content="Eden">
+<meta property="og:description" content="接触 Android 蓝牙开发已经有一段时间了，Android 官方文档虽然对蓝牙 API 介绍很详尽，但是对蓝牙协议不太了解的开发人员来说还是不足以建立一个系统的认识，当时和硬件组的小伙伴交流的时候这点带来的问题就特别明显。网上的资料少，并且良莠不齐，于是去 SIG 官网找了协议文档（七大卷，真的厚…)，查阅之后，厘清了很多概念，大致了解了整个系统轮廓。 接下来会从蓝牙协议和 Android 蓝">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://docs.google.com/drawings/d/e/2PACX-1vSPsBu4C99TXGRhrGDNB-XbGeaFb76966Zol_ZcCwRI0QUSI19fwi0GMbcLHMDLEMwKuBAXVUBtY3bP/pub?w=542&h=510">
+<meta property="og:image" content="http://yoursite.com/images/single_arch.png">
+<meta property="og:image" content="http://yoursite.com/images/dual_arch.png">
+<meta property="og:image" content="http://yoursite.com/images/gatt_profiles.png">
+<meta property="og:image" content="http://yoursite.com/images/spp.png">
+<meta property="og:image" content="http://yoursite.com/images/a2dp_roles.png">
+<meta property="og:image" content="https://docs.google.com/drawings/d/e/2PACX-1vSPsBu4C99TXGRhrGDNB-XbGeaFb76966Zol_ZcCwRI0QUSI19fwi0GMbcLHMDLEMwKuBAXVUBtY3bP/pub?w=542&h=510">
+<meta property="og:image" content="http://yoursite.com/images/single_arch.png">
+<meta property="og:image" content="http://yoursite.com/images/dual_arch.png">
+<meta property="og:image" content="http://yoursite.com/images/gatt_profiles.png">
+<meta property="og:image" content="http://yoursite.com/images/spp.png">
+<meta property="og:image" content="http://yoursite.com/images/a2dp_roles.png">
+<meta property="og:updated_time" content="2019-02-25T16:22:29.873Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 蓝牙开发 ᚼᛒ (一)">
+<meta name="twitter:description" content="接触 Android 蓝牙开发已经有一段时间了，Android 官方文档虽然对蓝牙 API 介绍很详尽，但是对蓝牙协议不太了解的开发人员来说还是不足以建立一个系统的认识，当时和硬件组的小伙伴交流的时候这点带来的问题就特别明显。网上的资料少，并且良莠不齐，于是去 SIG 官网找了协议文档（七大卷，真的厚…)，查阅之后，厘清了很多概念，大致了解了整个系统轮廓。 接下来会从蓝牙协议和 Android 蓝">
+<meta name="twitter:image" content="https://docs.google.com/drawings/d/e/2PACX-1vSPsBu4C99TXGRhrGDNB-XbGeaFb76966Zol_ZcCwRI0QUSI19fwi0GMbcLHMDLEMwKuBAXVUBtY3bP/pub?w=542&h=510">
+  
+    <link rel="alternative" href="/atom.xml" title="Eden" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-134333276-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</head></html>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Eden</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">首页</a></li><li><a href="/archives">归档</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Android 蓝牙开发 ᚼᛒ（一）" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2018/08/18/Android 蓝牙开发 ᚼᛒ（一）/" class="article-date">
+  <time datetime="2018-08-17T16:00:00.000Z" itemprop="datePublished">2018-08-18</time>
+</a>
+		</span>
+		<span class="meta-elements author">Xio</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Android 蓝牙开发 ᚼᛒ (一)
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>接触 Android 蓝牙开发已经有一段时间了，Android 官方文档虽然对蓝牙 API 介绍很详尽，但是对蓝牙协议不太了解的开发人员来说还是不足以建立一个系统的认识，当时和硬件组的小伙伴交流的时候这点带来的问题就特别明显。网上的资料少，并且良莠不齐，于是去 SIG 官网找了协议文档（七大卷，真的厚…)，查阅之后，厘清了很多概念，大致了解了整个系统轮廓。</p>
+<p>接下来会从蓝牙协议和 Android 蓝牙开发这两部分来叙述。</p>
+<p>这是第一篇，蓝牙协议。</p>
+<h2 id="什么是蓝牙"><a href="#什么是蓝牙" class="headerlink" title="什么是蓝牙"></a>什么是蓝牙</h2><p>蓝牙是一种短距离的短波无线通信技术，目前主要分为<strong>基础率/增强数据率（BR / EDR</strong>）和<strong>低功耗（LE）</strong>两个版本，前者通常也称为<strong>经典版蓝牙</strong>。</p>
+<p>关于蓝牙这个名称的由来，蓝牙的发展历史及各版本的比对等基本信息在<a href="https://zh.wikipedia.org/wiki/%E8%97%8D%E7%89%99" target="_blank" rel="noopener">蓝牙的维基百科词条</a>上写得很详细，就不再赘述。</p>
+<h2 id="蓝牙的架构"><a href="#蓝牙的架构" class="headerlink" title="蓝牙的架构"></a>蓝牙的架构</h2><p>蓝牙4.0是一个综合协议规范，它除了提出了新的 LE 规范，还囊括了 BR / EDR 规范，并在实际使用中分为了单模(Single mode)和双模(Dual mode)版本，前者仅支持 LE 规范且不能和蓝牙4.0之前的版本通信，后者同时支持 LE 和 BR / EDR 规范，并且兼容旧版蓝牙。</p>
+<blockquote>
+<p>本文关于蓝牙协议栈的分析均基于蓝牙4.1</p>
+</blockquote>
+<p>下图是根据蓝牙 4.1 核心技术栈及部分应用协议绘制的蓝牙协议栈示意图<br><img src="https://docs.google.com/drawings/d/e/2PACX-1vSPsBu4C99TXGRhrGDNB-XbGeaFb76966Zol_ZcCwRI0QUSI19fwi0GMbcLHMDLEMwKuBAXVUBtY3bP/pub?w=542&amp;h=510" alt="蓝牙协议栈"><br>*<em>上图仅供参考，详细架构图参见 <a href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=282159" target="_blank" rel="noopener">SIG 蓝牙协议文档</a></em><br><a id="more"></a></p>
+<p>蓝牙协议栈主要由主机 (Host)、控制器(Controllers) 和主机控制器接口(Host Controller Interface, HCI) 三部分组成。</p>
+<p>我们先以两个直观的表述来感受这三部分与我们现实设备的对应关系。</p>
+<p><em>对于没有蓝牙的PC，我们通常可以淘宝买一个USB蓝牙适配器来为PC增加蓝牙功能</em>。这里的蓝牙适配器可以理解为Controllers，PC 可以理解为 Host，USB 的连接方式就是一种 HCI。</p>
+<p>我们的手机上的蓝牙模块也可以这样对应，手机操作系统就是Host，Controllers就是主板上的蓝牙芯片，PCB 板上连接 CPU 和蓝牙 IC 的 <a href="https://zh.wikipedia.org/wiki/UART" target="_blank" rel="noopener">UART</a>，也是一种HCI。</p>
+<p>当然，以上表述并不严谨，实际上 Host 层是硬件的抽象，而与具体的硬件无关，控制器是协议栈的底层实现，它才与硬件直接相关，通常就是蓝牙 IC。</p>
+<p>前文图中展示的仅是一个通用的蓝牙架构图，我们手机上的双模蓝牙系统与之类似，但实际上<strong>一个蓝牙设备可以仅由一个 Host 和一个主控制器组成</strong>，HCI 层其实是可选的，在具有简单功能的蓝牙设备（例如耳机）中，Host 和控制器可以在同一微处理器上实现, 而无需 HCI。</p>
+<p>主控制器可以是以下三种：</p>
+<ul>
+<li>BR / EDR 控制器</li>
+<li>LE 控制器</li>
+<li>BR / EDR 和 LE 组合控制器</li>
+</ul>
+<p>可选的还可以有一个或多个次要控制器(AMP)，AMP 在蓝牙 3.0 就已经引入，主要和 BR / EDR 搭配使用，作为数据高速传输通道。这种场景下，BR / EDR 主要用作搜索，配对，连接建立和连接维持的作用。当两个 BR / EDR 蓝牙设备 L2CAP 连接建立后，AMP 管理器能检测到另外一个设备的AMP管理器。当两个蓝牙设备都有 AMP 控制器，蓝牙核心系统提供这样一种机制，能让数据流从主控制器迁移到次要控制器，即通过 AMP 来传输，AMP 可以使用 <a href="https://zh.wikipedia.org/wiki/IEEE_802.11" target="_blank" rel="noopener">802.11</a> 协议转换层(PAL) 來提供更高的傳輸率，最高可达 54 Mbps。</p>
+<p>结合以上，关于实际的蓝牙设备架构，我们可以组合几种控制器和 Host 得到以下符合规范的蓝牙架构：</p>
+<ul>
+<li>四种可能的单模架构</li>
+</ul>
+<p><img src="/images/single_arch.png" alt="single"></p>
+<ul>
+<li>三种可能的双模架构</li>
+</ul>
+<p><img src="/images/dual_arch.png" alt="dual"></p>
+<p>控制器和 HCI 涉及底层硬件部分，不做更多讨论，接下来重点对 Host 层做一个具体的说明。</p>
+<h2 id="Host"><a href="#Host" class="headerlink" title="Host"></a>Host</h2><p>Host 包含逻辑链路控制和适配层(Logical Link control &amp; Adaption Protocol, L2CAP) 以及图中未画出的 Channel Manager、Security Manager Protocol (SMP) 和图中出现的 GAP等其他更高层。L2CAP主要起到数据缓冲和简单数据管理的作用。通道管理器负责创建，管理和关闭用于传输服务协议和应用程序数据流的L2CAP通道。SMP等其他部分详情参见核心协议文档，我们把重点放到应用层。</p>
+<h3 id="Profiles"><a href="#Profiles" class="headerlink" title="Profiles"></a>Profiles</h3><p>蓝牙系统中的应用程序互操作性（应用部分）由各种蓝牙配置文件（Profile）完成。</p>
+<p> <strong>Profile 就是定义了一个实际的应用场景</strong>。具体来说，Profile 定义了蓝牙系统中从PHY（物理层）到 L2CAP 的每层以及核心规范之外的任何其他协议所需的功能和特性。应用的行为和数据格式也由 Profile 定义。当两个蓝牙设备都符合某一种配置文件 的所有要求时，即可开启并执行对应的应用操作。需要特别说明的是，LE 的Profile 和 BR / EDR 的并不兼容，前文中的蓝牙架构图里展示出的几个Profile例子中，<strong>蓝色背景的是 BR / EDR 特有的Profile</strong>。</p>
+<p>蓝牙规范中定义了很多常用的 Profile，在 4.0 中引入的 GATT / ATT 让我们可以创建新的 Profile。 下面介绍一些常用的配置文件</p>
+<h4 id="GAP"><a href="#GAP" class="headerlink" title="GAP"></a>GAP</h4><p><strong>GAP，即通用访问配置文件，所有蓝牙设备都必须实现的基本配置文件。</strong> 它定义了蓝牙设备的基本要求，例如，对于 BR / EDR，它定义了蓝牙设备以包括无线电，基带，链路管理器，L2CAP 和服务发现协议功能; 对于 LE，它定义了物理层，链路层，L2CAP，安全管理器，GATT / ATT。这将所有各层连接在一起，形成蓝牙设备的基本要求。它还描述了设备搜寻，连接建立，安全性，身份验证，关联模型和服务搜寻的行为方法。</p>
+<ul>
+<li><p>在BR / EDR中，GAP定义每个设备为单一角色，其可能具备的功能包括设备如何相互发现，建立连接以及描述用于身份验证的安全关联模型。设备可能只具备其中一种或多种功能，比如只具有启动或接受连接功能。</p>
+</li>
+<li><p>在 LE 中，GAP 定义了四个特定角色：<strong>Broadcaster</strong>，<strong>Observer</strong>，<strong>Peripheral</strong> 和 <strong>Central</strong>。如果底层 Controller 支持这些角色或角色组合，则设备也可同时支持多个角色。但是，在某一时刻只能支持其中一个角色。每个角色都指定了底层Controller的要求。这允许控制器针对特定用例进行优化。</p>
+</li>
+</ul>
+<h4 id="LE-的-Profiles"><a href="#LE-的-Profiles" class="headerlink" title="LE 的 Profiles"></a>LE 的 Profiles</h4><p>如上所诉，LE 让我们可以创建自己的 Profile，当然需要遵循一定的规范，这个规范就是 GATT / ATT</p>
+<h5 id="GATT-ATT"><a href="#GATT-ATT" class="headerlink" title="GATT / ATT"></a>GATT / ATT</h5><p>通用属性配置文件（GATT）构建在属性协议（ATT）之上，并为属性协议传输和存储的数据建立通用操作和框架。GATT 和 ATT 通常在 LE 中实现。</p>
+<blockquote>
+<p>是的，GATT 和 ATT 还可以在 BR / EDR 中实现，蓝牙 4.1 核心系统协议中对 GATT / ATT 的表述是：<em>“GATT和ATT不是特定于传输层的，其可用于BR / EDR 和 LE。而在 LE 中 GATT / ATT 用于搜寻服务，因此是必须实现的”</em> (<em>from</em> <a href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=282159" target="_blank" rel="noopener">core_SPEC_vol1_6.4</a>)</p>
+</blockquote>
+<p>GATT 定义了两个角色：服务端和客户端。 GATT 角色不一定与特定的 LE GAP 角色相关联，但可以由更高层的配置文件指定。GATT 服务器发送对请求的响应，并在配置时，在GATT服务器上发生指定事件时，向GATT客户端异步发送指示和通知。</p>
+<p>GATT 按照层级定义了三个概念：服务（Service）、特征（Characteristic）和描述（Descriptor）。他们的包含关系如下图所示：一个 Service 包含若干个 Characteristic，一个 Characteristic 包含若干 Descriptor。Characteristic 定义了数值和操作。把若干个相关的 Service 组合在一起，就成为了一个 Profile。</p>
+<p><img src="/images/gatt_profiles.png" alt="gatt_profiles"></p>
+<h4 id="BR-EDR-的-Profiles"><a href="#BR-EDR-的-Profiles" class="headerlink" title="BR / EDR 的 Profiles"></a>BR / EDR 的 Profiles</h4><p>虽然 BR / EDR 的配置文件都是在蓝牙2.0、 3.0 的时候设计的，但仍是目前蓝牙“大”流量数据传输的主要方式。比如硬件调试常用的串口通信（SPP），蓝牙耳机听歌用的 A2DP 协议，文件传输（FTP）等。</p>
+<h5 id="SPP"><a href="#SPP" class="headerlink" title="SPP"></a>SPP</h5><p>Serial Port Profile，即串口配置文件，定义了使用蓝牙进行 RS232（或类似）串口仿真的协议和过程。这也是蓝牙诞生之初的主要功能：替代 RS232 有线通信，以无线的方式链接多个设备，克服同步问题。<br>SPP 协议栈示意图：<br><img src="/images/spp.png" alt="spp"><br>图源: <a href="https://www.bluetooth.org/docman/handlers/DownloadDoc.ashx?doc_id=260866&amp;vId=290097" target="_blank" rel="noopener">SIG - SPP_SPEC_V12</a></p>
+<p>SPP 是基于 <a href="https://www.bluetooth.org/docman/handlers/DownloadDoc.ashx?doc_id=263754" target="_blank" rel="noopener">RFCOMM 通信协议</a>的规范，RFCOMM 是一种简单的传输协议，其实也是用于仿真RS-232（ITU-T V.24）串口通信。RFCOMM支持在两个设备之间模拟多个串口，或者在多个设备之间模拟串口，最多支持 两个设备间 60 个串口的同时连接。SPP 可以视为仅是对 RFCOMM的简单封装，Android 蓝牙 API 就将 RFCOMM 视为 SPP。</p>
+<h5 id="A2DP"><a href="#A2DP" class="headerlink" title="A2DP"></a>A2DP</h5><p>官方描述：</p>
+<blockquote>
+<p>高级音频分发配置文件（A2DP）定义了在 ACL 通道上实现单声道或立体声高质量音频内容分配的协议和程序。典型的使用情况是将音乐内容从立体声音乐播放器流式传输到耳机或扬声器。音频数据以适当的格式压缩，以有效利用有限的带宽。环绕声分布不包含在此配置文件的范围内。</p>
+</blockquote>
+<p>上面提到的“适当的格式”也就是网上很多蓝牙音质讨论帖中提到的SBC、Aptx等编码格式。</p>
+<p>此配置文件定义了以下角色：</p>
+<ul>
+<li><p>源 Source（SRC）</p>
+<p>  传送数字音频流到微微网SNK端。</p>
+</li>
+<li>接收器 Sink（SNK）</li>
+</ul>
+<p><img src="/images/a2dp_roles.png" alt="a2dp_roles"><br>图源: <a href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457083" target="_blank" rel="noopener">SIG - A2DP_SPEC_V132</a></p>
+<hr>
+<p>更多的 BR / EDR Profiles 和协议可以参考 <a href="https://www.bluetooth.com/specifications" target="_blank" rel="noopener">SIG官网</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://en.wikipedia.org/wiki/List_of_Bluetooth_protocols#Host_Controller_Interface_(HCI" target="_blank" rel="noopener">维基百科 - List of Bluetooth protocols</a>)</li>
+<li><a href="https://www.bluetooth.com/specifications/bluetooth-core-specification" target="_blank" rel="noopener">SIG - Core Specification</a></li>
+<li><a href="https://www.bluetooth.com/specifications/profiles-overview" target="_blank" rel="noopener">SIG - Traditional Profile Specifications</a></li>
+<li><a href="https://www.bluetooth.com/specifications/protocol-specifications" target="_blank" rel="noopener">SIG - Protocol Specifications</a></li>
+<li><a href="---
+title: Android 蓝牙开发 ᚼᛒ (一">Android docs - BluetoothSocket](https://developer.android.com/reference/android/bluetooth/BluetoothSocket)</a><br>date: 2018/11/18<br>comments: true<br>tags:</li>
+<li>Android</li>
+<li>Bluetooth</li>
+</ul>
+<hr>
+<p>接触 Android 蓝牙开发已经有一段时间了，Android 官方文档虽然对蓝牙 API 介绍很详尽，但是对蓝牙协议不太了解的开发人员来说还是不足以建立一个系统的认识，当时和硬件组的小伙伴交流的时候这点带来的问题就特别明显。网上的资料少，并且良莠不齐，于是去 SIG 官网找了协议文档（七大卷，真的厚…)，查阅之后，厘清了很多概念，大致了解了整个系统轮廓。</p>
+<p>接下来会从蓝牙协议和 Android 蓝牙开发这两部分来叙述。</p>
+<p>这是第一篇，蓝牙协议。</p>
+<h2 id="什么是蓝牙-1"><a href="#什么是蓝牙-1" class="headerlink" title="什么是蓝牙"></a>什么是蓝牙</h2><p>蓝牙是一种短距离的短波无线通信技术，目前主要分为<strong>基础率/增强数据率（BR / EDR</strong>）和<strong>低功耗（LE）</strong>两个版本，前者通常也称为<strong>经典版蓝牙</strong>。</p>
+<p>关于蓝牙这个名称的由来，蓝牙的发展历史及各版本的比对等基本信息在<a href="https://zh.wikipedia.org/wiki/%E8%97%8D%E7%89%99" target="_blank" rel="noopener">蓝牙的维基百科词条</a>上写得很详细，就不再赘述。</p>
+<h2 id="蓝牙的架构-1"><a href="#蓝牙的架构-1" class="headerlink" title="蓝牙的架构"></a>蓝牙的架构</h2><p>蓝牙4.0是一个综合协议规范，它除了提出了新的 LE 规范，还囊括了 BR / EDR 规范，并在实际使用中分为了单模(Single mode)和双模(Dual mode)版本，前者仅支持 LE 规范且不能和蓝牙4.0之前的版本通信，后者同时支持 LE 和 BR / EDR 规范，并且兼容旧版蓝牙。</p>
+<blockquote>
+<p>本文关于蓝牙协议栈的分析均基于蓝牙4.1</p>
+</blockquote>
+<p>下图是根据蓝牙 4.1 核心技术栈及部分应用协议绘制的蓝牙协议栈示意图<br><img src="https://docs.google.com/drawings/d/e/2PACX-1vSPsBu4C99TXGRhrGDNB-XbGeaFb76966Zol_ZcCwRI0QUSI19fwi0GMbcLHMDLEMwKuBAXVUBtY3bP/pub?w=542&amp;h=510" alt="蓝牙协议栈"><br>*<em>上图仅供参考，详细架构图参见 <a href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=282159" target="_blank" rel="noopener">SIG 蓝牙协议文档</a></em><br><!-- more --></p>
+<p>蓝牙协议栈主要由主机 (Host)、控制器(Controllers) 和主机控制器接口(Host Controller Interface, HCI) 三部分组成。</p>
+<p>我们先以两个直观的表述来感受这三部分与我们现实设备的对应关系。</p>
+<p><em>对于没有蓝牙的PC，我们通常可以淘宝买一个USB蓝牙适配器来为PC增加蓝牙功能</em>。这里的蓝牙适配器可以理解为Controllers，PC 可以理解为 Host，USB 的连接方式就是一种 HCI。</p>
+<p>我们的手机上的蓝牙模块也可以这样对应，手机操作系统就是Host，Controllers就是主板上的蓝牙芯片，PCB 板上连接 CPU 和蓝牙 IC 的 <a href="https://zh.wikipedia.org/wiki/UART" target="_blank" rel="noopener">UART</a>，也是一种HCI。</p>
+<p>当然，以上表述并不严谨，实际上 Host 层是硬件的抽象，而与具体的硬件无关，控制器是协议栈的底层实现，它才与硬件直接相关，通常就是蓝牙 IC。</p>
+<p>前文图中展示的仅是一个通用的蓝牙架构图，我们手机上的双模蓝牙系统与之类似，但实际上<strong>一个蓝牙设备可以仅由一个 Host 和一个主控制器组成</strong>，HCI 层其实是可选的，在具有简单功能的蓝牙设备（例如耳机）中，Host 和控制器可以在同一微处理器上实现, 而无需 HCI。</p>
+<p>主控制器可以是以下三种：</p>
+<ul>
+<li>BR / EDR 控制器</li>
+<li>LE 控制器</li>
+<li>BR / EDR 和 LE 组合控制器</li>
+</ul>
+<p>可选的还可以有一个或多个次要控制器(AMP)，AMP 在蓝牙 3.0 就已经引入，主要和 BR / EDR 搭配使用，作为数据高速传输通道。这种场景下，BR / EDR 主要用作搜索，配对，连接建立和连接维持的作用。当两个 BR / EDR 蓝牙设备 L2CAP 连接建立后，AMP 管理器能检测到另外一个设备的AMP管理器。当两个蓝牙设备都有 AMP 控制器，蓝牙核心系统提供这样一种机制，能让数据流从主控制器迁移到次要控制器，即通过 AMP 来传输，AMP 可以使用 <a href="https://zh.wikipedia.org/wiki/IEEE_802.11" target="_blank" rel="noopener">802.11</a> 协议转换层(PAL) 來提供更高的傳輸率，最高可达 54 Mbps。</p>
+<p>结合以上，关于实际的蓝牙设备架构，我们可以组合几种控制器和 Host 得到以下符合规范的蓝牙架构：</p>
+<ul>
+<li>四种可能的单模架构</li>
+</ul>
+<p><img src="/images/single_arch.png" alt="single"></p>
+<ul>
+<li>三种可能的双模架构</li>
+</ul>
+<p><img src="/images/dual_arch.png" alt="dual"></p>
+<p>控制器和 HCI 涉及底层硬件部分，不做更多讨论，接下来重点对 Host 层做一个具体的说明。</p>
+<h2 id="Host-1"><a href="#Host-1" class="headerlink" title="Host"></a>Host</h2><p>Host 包含逻辑链路控制和适配层(Logical Link control &amp; Adaption Protocol, L2CAP) 以及图中未画出的 Channel Manager、Security Manager Protocol (SMP) 和图中出现的 GAP等其他更高层。L2CAP主要起到数据缓冲和简单数据管理的作用。通道管理器负责创建，管理和关闭用于传输服务协议和应用程序数据流的L2CAP通道。SMP等其他部分详情参见核心协议文档，我们把重点放到应用层。</p>
+<h3 id="Profiles-1"><a href="#Profiles-1" class="headerlink" title="Profiles"></a>Profiles</h3><p>蓝牙系统中的应用程序互操作性（应用部分）由各种蓝牙配置文件（Profile）完成。</p>
+<p> <strong>Profile 就是定义了一个实际的应用场景</strong>。具体来说，Profile 定义了蓝牙系统中从PHY（物理层）到 L2CAP 的每层以及核心规范之外的任何其他协议所需的功能和特性。应用的行为和数据格式也由 Profile 定义。当两个蓝牙设备都符合某一种配置文件 的所有要求时，即可开启并执行对应的应用操作。需要特别说明的是，LE 的Profile 和 BR / EDR 的并不兼容，前文中的蓝牙架构图里展示出的几个Profile例子中，<strong>蓝色背景的是 BR / EDR 特有的Profile</strong>。</p>
+<p>蓝牙规范中定义了很多常用的 Profile，在 4.0 中引入的 GATT / ATT 让我们可以创建新的 Profile。 下面介绍一些常用的配置文件</p>
+<h4 id="GAP-1"><a href="#GAP-1" class="headerlink" title="GAP"></a>GAP</h4><p><strong>GAP，即通用访问配置文件，所有蓝牙设备都必须实现的基本配置文件。</strong> 它定义了蓝牙设备的基本要求，例如，对于 BR / EDR，它定义了蓝牙设备以包括无线电，基带，链路管理器，L2CAP 和服务发现协议功能; 对于 LE，它定义了物理层，链路层，L2CAP，安全管理器，GATT / ATT。这将所有各层连接在一起，形成蓝牙设备的基本要求。它还描述了设备搜寻，连接建立，安全性，身份验证，关联模型和服务搜寻的行为方法。</p>
+<ul>
+<li><p>在BR / EDR中，GAP定义每个设备为单一角色，其可能具备的功能包括设备如何相互发现，建立连接以及描述用于身份验证的安全关联模型。设备可能只具备其中一种或多种功能，比如只具有启动或接受连接功能。</p>
+</li>
+<li><p>在 LE 中，GAP 定义了四个特定角色：<strong>Broadcaster</strong>，<strong>Observer</strong>，<strong>Peripheral</strong> 和 <strong>Central</strong>。如果底层 Controller 支持这些角色或角色组合，则设备也可同时支持多个角色。但是，在某一时刻只能支持其中一个角色。每个角色都指定了底层Controller的要求。这允许控制器针对特定用例进行优化。</p>
+</li>
+</ul>
+<h4 id="LE-的-Profiles-1"><a href="#LE-的-Profiles-1" class="headerlink" title="LE 的 Profiles"></a>LE 的 Profiles</h4><p>如上所诉，LE 让我们可以创建自己的 Profile，当然需要遵循一定的规范，这个规范就是 GATT / ATT</p>
+<h5 id="GATT-ATT-1"><a href="#GATT-ATT-1" class="headerlink" title="GATT / ATT"></a>GATT / ATT</h5><p>通用属性配置文件（GATT）构建在属性协议（ATT）之上，并为属性协议传输和存储的数据建立通用操作和框架。GATT 和 ATT 通常在 LE 中实现。</p>
+<blockquote>
+<p>是的，GATT 和 ATT 还可以在 BR / EDR 中实现，蓝牙 4.1 核心系统协议中对 GATT / ATT 的表述是：<em>“GATT和ATT不是特定于传输层的，其可用于BR / EDR 和 LE。而在 LE 中 GATT / ATT 用于搜寻服务，因此是必须实现的”</em> (<em>from</em> <a href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=282159" target="_blank" rel="noopener">core_SPEC_vol1_6.4</a>)</p>
+</blockquote>
+<p>GATT 定义了两个角色：服务端和客户端。 GATT 角色不一定与特定的 LE GAP 角色相关联，但可以由更高层的配置文件指定。GATT 服务器发送对请求的响应，并在配置时，在GATT服务器上发生指定事件时，向GATT客户端异步发送指示和通知。</p>
+<p>GATT 按照层级定义了三个概念：服务（Service）、特征（Characteristic）和描述（Descriptor）。他们的包含关系如下图所示：一个 Service 包含若干个 Characteristic，一个 Characteristic 包含若干 Descriptor。Characteristic 定义了数值和操作。把若干个相关的 Service 组合在一起，就成为了一个 Profile。</p>
+<p><img src="/images/gatt_profiles.png" alt="gatt_profiles"></p>
+<h4 id="BR-EDR-的-Profiles-1"><a href="#BR-EDR-的-Profiles-1" class="headerlink" title="BR / EDR 的 Profiles"></a>BR / EDR 的 Profiles</h4><p>虽然 BR / EDR 的配置文件都是在蓝牙2.0、 3.0 的时候设计的，但仍是目前蓝牙“大”流量数据传输的主要方式。比如硬件调试常用的串口通信（SPP），蓝牙耳机听歌用的 A2DP 协议，文件传输（FTP）等。</p>
+<h5 id="SPP-1"><a href="#SPP-1" class="headerlink" title="SPP"></a>SPP</h5><p>Serial Port Profile，即串口配置文件，定义了使用蓝牙进行 RS232（或类似）串口仿真的协议和过程。这也是蓝牙诞生之初的主要功能：替代 RS232 有线通信，以无线的方式链接多个设备，克服同步问题。<br>SPP 协议栈示意图：<br><img src="/images/spp.png" alt="spp"><br>图源: <a href="https://www.bluetooth.org/docman/handlers/DownloadDoc.ashx?doc_id=260866&amp;vId=290097" target="_blank" rel="noopener">SIG - SPP_SPEC_V12</a></p>
+<p>SPP 是基于 <a href="https://www.bluetooth.org/docman/handlers/DownloadDoc.ashx?doc_id=263754" target="_blank" rel="noopener">RFCOMM 通信协议</a>的规范，RFCOMM 是一种简单的传输协议，其实也是用于仿真RS-232（ITU-T V.24）串口通信。RFCOMM支持在两个设备之间模拟多个串口，或者在多个设备之间模拟串口，最多支持 两个设备间 60 个串口的同时连接。SPP 可以视为仅是对 RFCOMM的简单封装，Android 蓝牙 API 就将 RFCOMM 视为 SPP。</p>
+<h5 id="A2DP-1"><a href="#A2DP-1" class="headerlink" title="A2DP"></a>A2DP</h5><p>官方描述：</p>
+<blockquote>
+<p>高级音频分发配置文件（A2DP）定义了在 ACL 通道上实现单声道或立体声高质量音频内容分配的协议和程序。典型的使用情况是将音乐内容从立体声音乐播放器流式传输到耳机或扬声器。音频数据以适当的格式压缩，以有效利用有限的带宽。环绕声分布不包含在此配置文件的范围内。</p>
+</blockquote>
+<p>上面提到的“适当的格式”也就是网上很多蓝牙音质讨论帖中提到的SBC、Aptx等编码格式。</p>
+<p>此配置文件定义了以下角色：</p>
+<ul>
+<li><p>源 Source（SRC）</p>
+<p>  传送数字音频流到<a href="https://en.wikipedia.org/wiki/Piconet" target="_blank" rel="noopener">极微网</a> SNK 端。</p>
+</li>
+<li>接收器 Sink（SNK）</li>
+</ul>
+<p><img src="/images/a2dp_roles.png" alt="a2dp_roles"><br>图源: <a href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=457083" target="_blank" rel="noopener">SIG - A2DP_SPEC_V132</a></p>
+<hr>
+<p>更多的 BR / EDR Profiles 和协议可以参考 <a href="https://www.bluetooth.com/specifications" target="_blank" rel="noopener">SIG官网</a></p>
+<h1 id="Reference-1"><a href="#Reference-1" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://en.wikipedia.org/wiki/List_of_Bluetooth_protocols#Host_Controller_Interface_(HCI" target="_blank" rel="noopener">维基百科 - List of Bluetooth protocols</a>)</li>
+<li><a href="https://www.bluetooth.com/specifications/bluetooth-core-specification" target="_blank" rel="noopener">SIG - Core Specification</a></li>
+<li><a href="https://www.bluetooth.com/specifications/profiles-overview" target="_blank" rel="noopener">SIG - Traditional Profile Specifications</a></li>
+<li><a href="https://www.bluetooth.com/specifications/protocol-specifications" target="_blank" rel="noopener">SIG - Protocol Specifications</a></li>
+<li><a href="https://developer.android.com/reference/android/bluetooth/BluetoothSocket" target="_blank" rel="noopener">Android docs - BluetoothSocket</a>)</li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bluetooth/">Bluetooth</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/12/Python IO - 输出重定向/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python IO - 输出重定向
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/09/深入 Java 多态/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          关于 Java 多态（Polymorphism）
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Eden</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2019 Xio<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
