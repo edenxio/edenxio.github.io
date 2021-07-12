@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2019/12/06/Apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%92%8C%E5%8E%8B%E7%BC%A9%E7%9A%84%E4%BD%93%E7%A7%AF%E9%97%AE%E9%A2%98/</loc>
+    <loc>http://yoursite.com/2019/10/06/Apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%92%8C%E5%8E%8B%E7%BC%A9%E7%9A%84%E4%BD%93%E7%A7%AF%E9%97%AE%E9%A2%98/</loc>
     
     <lastmod>2021-07-12</lastmod>
     
@@ -88,14 +88,14 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/tags/Python/</loc>
+    <loc>http://yoursite.com/tags/Java/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://yoursite.com/tags/Java/</loc>
+    <loc>http://yoursite.com/tags/Python/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
