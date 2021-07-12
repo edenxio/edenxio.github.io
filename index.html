@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
+<head>
   <meta charset="utf-8">
   
   <title>Eden</title>
@@ -9,16 +9,18 @@
 <meta property="og:title" content="Eden">
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="Eden">
-<meta property="og:locale" content="zh-cn">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Xio">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Eden">
   
     <link rel="alternative" href="/atom.xml" title="Eden" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
 <script type="text/javascript">
@@ -33,7 +35,7 @@
   })();
 </script>
 
-</head></html>
+<meta name="generator" content="Hexo 5.4.0"></head>
 <body>
   <div id="container">
     <div class="mobile-nav-panel">
@@ -56,6 +58,69 @@
 </header>
     <div id="main">
       
+  
+    <article id="post-Apk 反编译和压缩的体积问题" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2021/07/12/Apk 反编译和压缩的体积问题/" class="article-date">
+  <time datetime="2021-07-12T02:09:09.262Z" itemprop="datePublished">2021-07-12</time>
+</a>
+		</span>
+		<span class="meta-elements author">Xio</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+	</header>
+	<div class="entry-content">
+		
+    	<h1 id="Apk-反编译和压缩的体积问题"><a href="#Apk-反编译和压缩的体积问题" class="headerlink" title="Apk 反编译和压缩的体积问题"></a>Apk 反编译和压缩的体积问题</h1><hr>
+<p>title: Apk 反编译和压缩的体积问题<br>date: 2019/12/06<br>comments: true<br>tags:</p>
+<ul>
+<li>Android</li>
+</ul>
+<hr>
+<p>这段时间在做 Android 多渠道可自定义打包的工作，测试过程中发现经过反编译后再重新压缩签名打包后的 apk 文件总是要比原文件更小一些。</p>
+<!--- more --->
+
+<p>apk 文件也是一个压缩文件，可以使用 <code>zipinfo</code> 命令查看压缩信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; zipinfo test.apk</span></span><br><span class="line"></span><br><span class="line">Zip file size: 17426 bytes, number of entries: 12</span><br><span class="line">-rw----     0.0 fat     2132 b- defN 80-000-00 00:00 AndroidManifest.xml</span><br><span class="line">-rw----     2.4 fat      765 b- defN 80-000-00 00:00 META-INF/CERT.RSA</span><br><span class="line">-rw----     2.4 fat      836 b- defN 80-000-00 00:00 META-INF/CERT.SF</span><br><span class="line">-rw----     2.4 fat      793 b- defN 80-000-00 00:00 META-INF/MANIFEST.MF</span><br><span class="line">-rw----     2.4 fat    10656 b- defN 80-000-00 00:00 classes.dex</span><br><span class="line">-rw----     2.4 fat      642 b- stor 80-000-00 00:00 res/drawable-hdpi-v4/ic_launcher.png</span><br><span class="line">-rw----     2.4 fat      566 b- stor 80-000-00 00:00 res/drawable-mdpi-v4/ic_launcher.png</span><br><span class="line">-rw----     2.4 fat      688 b- stor 80-000-00 00:00 res/drawable-xhdpi-v4/ic_launcher.png</span><br><span class="line">-rw----     2.4 fat      824 b- stor 80-000-00 00:00 res/drawable-xxhdpi-v4/ic_launcher.png</span><br><span class="line">-rw----     0.0 fat      608 b- defN 80-000-00 00:00 res/layout/view.xml</span><br><span class="line">-rw----     0.0 fat      236 b- defN 80-000-00 00:00 res/xml/methods.xml</span><br><span class="line">-rw----     0.0 fat     1904 b- stor 80-000-00 00:00 resources.arsc</span><br><span class="line">12 files, 20650 bytes uncompressed, 10917 bytes compressed:  47.1%</span><br></pre></td></tr></table></figure>
+
+<p><code>stor</code> 表示压缩类型是 <code>store</code>，即不压缩，<code>defN</code> 表示默认压缩, <em>参考 <a target="_blank" rel="noopener" href="https://docs.oracle.com/cd/E88353_01/html/E37839/zipinfo-1.html">oracle zipinfo</a></em></p>
+<p>可以发现，Android apk 对于很多媒体资源类型的文件是不压缩的。而如果我在反编译之后直接使用 <code>zip</code> 命令压缩打包，那默认会对所有文件做压缩处理，最终得到的 apk 体积就会更小一些。 </p>
+<p>这样做自然是有风险的，经过测试，如果对一个游戏包做这样的处理，有可能会导致游戏打开直接黑屏，实际上它应该是有一段开屏动画的。Android 游戏的开屏动画往往是一个视频，经过压缩后可能就无法正常播放，参考官方文档的<a target="_blank" rel="noopener" href="https://developer.android.com/google/play/expansion-files.html#skipping-zip-compression-of-media-files">说明</a>, 对这类文件需要按非压缩类型处理。处理方式：</p>
+<p><code>zip -rn .mp4:.flv:.mp3:.gif:.lua:assets/bundle.json</code></p>
+<ul>
+<li><code>-n</code> 表示不压缩此后缀的文件，多个规则用<code>:</code>隔开</li>
+<li><code>-x</code> 表示忽略该文件，不加入压缩包</li>
+</ul>
+<p>实际上，使用 <code>apktool</code> 反编译后的文件夹里有一个配置文件<code>apktool.yml</code> ，里面有一项 <code>doNotCompress</code> ：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">doNotCompress:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">resources.arsc</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">assets/.appkey</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">png</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">jpg</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">ogg</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">mp3</span></span><br></pre></td></tr></table></figure>
+<p>表示原 apk 中以非压缩形式存储的文件类型/文件。因此如果我们需要在反编译之后做自定义操作，并使用 <code>zip</code> 打包的话，可以结合 <code>apktool.yml</code> 这个文件对原 apk 包内的非压缩文件做特殊处理。</p>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
   
     <article id="post-Android 构建脚本从Groovy迁移到Kotlin DSL" class="post">
 	<footer class="entry-meta-header">
@@ -91,7 +156,7 @@
 <li>重构很麻烦<br><br>…</li>
 </ul>
 <p>kotlin 并非动态语言，但却兼具了 Groovy 的灵活性和静态语言的特点，是一种类型安全的 DSL，很大程度上解决了上述的问题。</p>
-<p>所以，开始吧！！<br></p>
+<p>所以，开始吧！！</p>
 			
 				<p class="article-more-link">
 					<a href="/2019/02/01/Android 构建脚本从Groovy迁移到Kotlin DSL/#more">继续阅读</a>
@@ -106,7 +171,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kotlin/">Kotlin</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kotlin/" rel="tag">Kotlin</a></li></ul>
 
 			</span>
 		</div>
@@ -144,12 +209,40 @@
 	</header>
 	<div class="entry-content">
 		
-			<p>今天在写 Python 单元测试的时候需要获取到待测试方法的<code>print()</code>输出，在<code>Shell</code>中使用管道重定向输出很容易，但是在<code>Python</code>中如何进行呢？</p>
-			
-				<p class="article-more-link">
-					<a href="/2018/12/12/Python IO - 输出重定向/#more">继续阅读</a>
-				</p>
-      
+    	<p>今天在写 Python 单元测试的时候需要获取到待测试方法的<code>print()</code>输出，在<code>Shell</code>中使用管道重定向输出很容易，但是在<code>Python</code>中如何进行呢？</p>
+<!--- more --->
+
+<h1 id="Python-中的标准输入输出"><a href="#Python-中的标准输入输出" class="headerlink" title="Python 中的标准输入输出"></a>Python 中的标准输入输出</h1><h2 id="print-和-sys-stdout"><a href="#print-和-sys-stdout" class="headerlink" title="print 和 sys.stdout"></a>print 和 sys.stdout</h2><p>当我们在 Python 中打印值调用 <code>print(value)</code> 时候，等价于调用 <code>sys.stdout.write(value+&#39;\n&#39;)</code></p>
+<p>print 将内容打印到了控制台，然后追加了一个换行符</p>
+<h2 id="input-和-sys-stdin"><a href="#input-和-sys-stdin" class="headerlink" title="input 和 sys.stdin"></a>input 和 sys.stdin</h2><p>当我们用 raw_input(‘promption: ‘) 时，事实上是先把提示信息输出，然后捕获输入</p>
+<p>以下两组在实际上等价：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hi=raw_input(&#x27;Hi~&#x27;)</span><br><span class="line"></span><br><span class="line">sys.stdout.write(&#x27;Hi~&#x27;)</span><br><span class="line"># -1 to discard the &#x27;\n&#x27; in input stream</span><br><span class="line">hi=sys.stdin.readline()[:-1] </span><br></pre></td></tr></table></figure>
+<p>而在Python 3中新增的<code>input()</code>函数则在此基础上，增加了类型判断的处理，尝试将输入解析为适当的数据类型。</p>
+<blockquote>
+<p>实际上 print 或者 raw_input 在 cpython 中的源码要复杂得多，这里‘等价’的仅是示意其与标准输入输出直接相关。源码可以参考文末给出的链接</p>
+</blockquote>
+<h1 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h1><p>默认的 <code>sys.stdout</code> 指向控制台，我们可以重定向到其他流(或者具有<code>write</code>方法的对象)：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#标准输出重定向至文件</span><br><span class="line">with open(&#x27;out.txt&#x27;, &#x27;w+&#x27;) as f:</span><br><span class="line">    sys.stdout = f </span><br><span class="line"></span><br><span class="line"># 标准输出重定向至字符流</span><br><span class="line">sys.stdout = strout = StringIO()</span><br></pre></td></tr></table></figure>
+<p>完成任务后最好恢复标准输出至原先的地址(默认控制台)：</p>
+<ul>
+<li><p>可以在重定向前获取<code>stdout</code>的默认引用，恢复的时候再指向这个引用即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">orig_stdout = sys.stdout</span><br><span class="line"># ...$重定向代码$...</span><br><span class="line"># ...print(&#x27;hahaha...&#x27;)...</span><br><span class="line"></span><br><span class="line"># 恢复</span><br><span class="line">sys.stdout = orig_stdout</span><br></pre></td></tr></table></figure></li>
+<li><p>或使用<code>sys.__stdout__</code>，其保存程序开始时<code>sys.stdout</code>的原始值，且不受重定向影响</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># ...$重定向代码$...</span><br><span class="line"># ...print(&#x27;hahaha...&#x27;)...</span><br><span class="line">sys.stdout = sys.__stdout__</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>结合上下文管理器，我们还可以这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@contextmanager</span><br><span class="line">def stdout_redirected(new_stdout):</span><br><span class="line">    save_stdout = sys.stdout</span><br><span class="line">    sys.stdout = new_stdout</span><br><span class="line">    try:</span><br><span class="line">        yield None</span><br><span class="line">    finally:</span><br><span class="line">        sys.stdout = save_stdout</span><br><span class="line"></span><br><span class="line"># 使用</span><br><span class="line">with opened(filename, &quot;w&quot;) as f:</span><br><span class="line">    with stdout_redirected(f):</span><br><span class="line">        print &quot;Hello world&quot;</span><br></pre></td></tr></table></figure>
+
+<p>应用示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">from io import StringIO</span><br><span class="line"></span><br><span class="line"># parse 函数直接将&#x27;解析&#x27;结果打印出来了，我们需要判断解析是否正确</span><br><span class="line"></span><br><span class="line">def parse(query):</span><br><span class="line">    print(f&#x27;query: &#123;query&#125;&#x27;)</span><br><span class="line"></span><br><span class="line">def test(query):</span><br><span class="line">    sys.stdout = strdout = StringIO()</span><br><span class="line">    parse(query)</span><br><span class="line">    sys.stdout = sys.__stdout__</span><br><span class="line">    return strdout.getvalue()</span><br><span class="line"></span><br><span class="line">result = test(&#x27;This message is for query&#x27;)</span><br><span class="line">print(result.split()[1])</span><br><span class="line"></span><br><span class="line"># output：This</span><br></pre></td></tr></table></figure>
+<p>同样的，<code>sys.stderr</code>, <code>sys.stdin</code> 也都可以被重定向到多个地址。</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/python/cpython/blob/3.6/Python/sysmodule.c">cpython 3.6 - sys</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/python/cpython/blob/c41523ac2447b0e86b702f58458f3b3548439c8b/Python/bltinmodule.c#L1864">cpython 3.6 - input</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/sys.html#sys.__stdout__">python 3 doc - sys.__stdout__</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0343/#use-cases">PEP 343 – The “with” Statement use-case</a></li>
+</ul>
+
     
 	</div>
 	<footer class="entry-footer">
@@ -163,7 +256,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
 
 			</span>
 		</div>
@@ -201,11 +294,11 @@
 	</header>
 	<div class="entry-content">
 		
-			<p><a href="https://edenxio.github.io/2018/08/18/Android%20%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91%20%E1%9A%BC%E1%9B%92%EF%BC%88%E4%B8%80%EF%BC%89/" target="_blank" rel="noopener">上一篇</a>对蓝牙协议栈做了一个简要的说明，本篇回到主题，谈谈 Android 中的蓝牙开发。</p>
+			<p><a target="_blank" rel="noopener" href="https://edenxio.github.io/2018/08/18/Android%20%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91%20%E1%9A%BC%E1%9B%92%EF%BC%88%E4%B8%80%EF%BC%89/">上一篇</a>对蓝牙协议栈做了一个简要的说明，本篇回到主题，谈谈 Android 中的蓝牙开发。</p>
 <h2 id="发展"><a href="#发展" class="headerlink" title="发展"></a>发展</h2><p>Android 1.0 开始就支持了蓝牙2.0，开始的时候仅支持 headset profile 和 hands-free profile，1.5（<code>capcake</code>）开始支持了 A2dp，2.0 支持了蓝牙 2.1，并提供了 RFCOMM 相关 API…，到 Android 4.3 终于开始支持低功耗蓝牙，但只支持BLE的中心设备模式，到Android 5.0 才支持外设模式。</p>
 <p>虽然一直在加大对蓝牙系统的支持，但在初期的 Android 蓝牙开发中 经常受到诟病的一点是 API 不够稳定，并且还有许多标准通信类型还不支持。其原因主要和使用的蓝牙堆栈实现有关。</p>
 <p>在 Android 的早期版本中，整个蓝牙堆栈都是基于 BlueZ 构建的，BlueZ 是 Linux 内核中使用的开源堆栈。这个堆栈非常成熟和稳定。然而在Android环境中，BlueZ 存在一些问题，主要与其附加的 GPL 许可协议有关。为了避免与其他 Apache 许可的 Android 堆栈冲突，BlueZ 需要在一个与特殊守护进程（bluetoothd）交互的单独进程中运行。这些处理带来了大量额外的开销。</p>
-<p>为了回避这一切，在 Android 4.2中，Google 用 Bluedroid 取代了 Android 中的 BlueZ，Bluedroid 是博通开发的全新堆栈，采用的是 Apache 开源许可，可以与蓝牙堆栈的其余部分直接兼容。 Bluedroid 是一个全新的堆栈，而 对 BLE 的支持是 Android 4.3 才引入。<br></p>
+<p>为了回避这一切，在 Android 4.2中，Google 用 Bluedroid 取代了 Android 中的 BlueZ，Bluedroid 是博通开发的全新堆栈，采用的是 Apache 开源许可，可以与蓝牙堆栈的其余部分直接兼容。 Bluedroid 是一个全新的堆栈，而 对 BLE 的支持是 Android 4.3 才引入。</p>
 			
 				<p class="article-more-link">
 					<a href="/2018/08/19/Android 蓝牙开发 ᚼᛒ（二）/#more">继续阅读</a>
@@ -220,7 +313,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bluetooth/">Bluetooth</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bluetooth/" rel="tag">Bluetooth</a></li></ul>
 
 			</span>
 		</div>
@@ -262,12 +355,12 @@
 <p>接下来会从蓝牙协议和 Android 蓝牙开发这两部分来叙述。</p>
 <p>这是第一篇，蓝牙协议。</p>
 <h2 id="什么是蓝牙"><a href="#什么是蓝牙" class="headerlink" title="什么是蓝牙"></a>什么是蓝牙</h2><p>蓝牙是一种短距离的短波无线通信技术，目前主要分为<strong>基础率/增强数据率（BR / EDR</strong>）和<strong>低功耗（LE）</strong>两个版本，前者通常也称为<strong>经典版蓝牙</strong>。</p>
-<p>关于蓝牙这个名称的由来，蓝牙的发展历史及各版本的比对等基本信息在<a href="https://zh.wikipedia.org/wiki/%E8%97%8D%E7%89%99" target="_blank" rel="noopener">蓝牙的维基百科词条</a>上写得很详细，就不再赘述。</p>
+<p>关于蓝牙这个名称的由来，蓝牙的发展历史及各版本的比对等基本信息在<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%97%8D%E7%89%99">蓝牙的维基百科词条</a>上写得很详细，就不再赘述。</p>
 <h2 id="蓝牙的架构"><a href="#蓝牙的架构" class="headerlink" title="蓝牙的架构"></a>蓝牙的架构</h2><p>蓝牙4.0是一个综合协议规范，它除了提出了新的 LE 规范，还囊括了 BR / EDR 规范，并在实际使用中分为了单模(Single mode)和双模(Dual mode)版本，前者仅支持 LE 规范且不能和蓝牙4.0之前的版本通信，后者同时支持 LE 和 BR / EDR 规范，并且兼容旧版蓝牙。</p>
 <blockquote>
 <p>本文关于蓝牙协议栈的分析均基于蓝牙4.1</p>
 </blockquote>
-<p>下图是根据蓝牙 4.1 核心技术栈及部分应用协议绘制的蓝牙协议栈示意图<br><img src="/images/蓝牙协议栈示意图.png" alt="蓝牙协议栈"><br>*<em>上图仅供参考，详细架构图参见 <a href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=282159" target="_blank" rel="noopener">SIG 蓝牙协议文档</a></em><br></p>
+<p>下图是根据蓝牙 4.1 核心技术栈及部分应用协议绘制的蓝牙协议栈示意图<br><img src="/images/%E8%93%9D%E7%89%99%E5%8D%8F%E8%AE%AE%E6%A0%88%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="蓝牙协议栈"><br>*<em>上图仅供参考，详细架构图参见 <a target="_blank" rel="noopener" href="https://www.bluetooth.org/docman/handlers/downloaddoc.ashx?doc_id=282159">SIG 蓝牙协议文档</a></em></p>
 			
 				<p class="article-more-link">
 					<a href="/2018/08/18/Android 蓝牙开发 ᚼᛒ（一）/#more">继续阅读</a>
@@ -282,7 +375,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bluetooth/">Bluetooth</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bluetooth/" rel="tag">Bluetooth</a></li></ul>
 
 			</span>
 		</div>
@@ -321,8 +414,9 @@
 	<div class="entry-content">
 		
 			<p>之前看 <em>Thinking in Java</em> 的时候自认为理解了 Java 中的多态性和方法动态绑定，直到看到下面这个栗子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">    public String show(D obj) &#123;</span><br><span class="line">        return (&quot;A and D&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;A and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A &#123;</span><br><span class="line">    public String show(B obj) &#123;</span><br><span class="line">        return (&quot;B and B&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;B and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class C extends B &#123; &#125;</span><br><span class="line"></span><br><span class="line">class D extends B &#123; &#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">        A a1 = new A();</span><br><span class="line">        A a2 = new B();</span><br><span class="line">        B b = new B();</span><br><span class="line">        C c = new C();</span><br><span class="line">        D d = new D();</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;1--&quot; + a1.show(b));</span><br><span class="line">        System.out.println(&quot;2--&quot; + a1.show(c));</span><br><span class="line">        System.out.println(&quot;3--&quot; + a1.show(d));</span><br><span class="line">        System.out.println(&quot;4--&quot; + a2.show(b));</span><br><span class="line">        System.out.println(&quot;5--&quot; + a2.show(c));</span><br><span class="line">        System.out.println(&quot;6--&quot; + a2.show(d));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 1--A and A</span><br><span class="line">     * 2--A and A</span><br><span class="line">     * 3--A and D</span><br><span class="line">     * 4--B and A</span><br><span class="line">     * 5--B and A</span><br><span class="line">     * 6--A and D</span><br><span class="line">     */</span><br></pre></td></tr></table></figure>
-<p>最后的输出中，前三条是毫无疑问的，从第四条开始好像就不太符合我们直觉了，<code>a2</code>的实际类型是<code>B</code>, <code>a2.show(b)</code>调用的不应该是<code>B.show(B)</code>这个方法吗，为什么会调用<code>B.show(A)</code>方法呢？<br></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">    public String show(D obj) &#123;</span><br><span class="line">        return (&quot;A and D&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;A and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A &#123;</span><br><span class="line">    public String show(B obj) &#123;</span><br><span class="line">        return (&quot;B and B&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;B and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class C extends B &#123; &#125;</span><br><span class="line"></span><br><span class="line">class D extends B &#123; &#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">        A a1 = new A();</span><br><span class="line">        A a2 = new B();</span><br><span class="line">        B b = new B();</span><br><span class="line">        C c = new C();</span><br><span class="line">        D d = new D();</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;1--&quot; + a1.show(b));</span><br><span class="line">        System.out.println(&quot;2--&quot; + a1.show(c));</span><br><span class="line">        System.out.println(&quot;3--&quot; + a1.show(d));</span><br><span class="line">        System.out.println(&quot;4--&quot; + a2.show(b));</span><br><span class="line">        System.out.println(&quot;5--&quot; + a2.show(c));</span><br><span class="line">        System.out.println(&quot;6--&quot; + a2.show(d));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 1--A and A</span><br><span class="line">     * 2--A and A</span><br><span class="line">     * 3--A and D</span><br><span class="line">     * 4--B and A</span><br><span class="line">     * 5--B and A</span><br><span class="line">     * 6--A and D</span><br><span class="line">     */</span><br></pre></td></tr></table></figure>
+
+<p>最后的输出中，前三条是毫无疑问的，从第四条开始好像就不太符合我们直觉了，<code>a2</code>的实际类型是<code>B</code>, <code>a2.show(b)</code>调用的不应该是<code>B.show(B)</code>这个方法吗，为什么会调用<code>B.show(A)</code>方法呢？</p>
 			
 				<p class="article-more-link">
 					<a href="/2018/06/09/深入 Java 多态/#more">继续阅读</a>
@@ -337,7 +431,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
 
 			</span>
 		</div>
@@ -386,7 +480,7 @@
 			</span>
 			<span class="tags">
 				
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hello/">Hello</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hello/" rel="tag">Hello</a></li></ul>
 
 			</span>
 		</div>
@@ -414,7 +508,7 @@
 		<a href="/">Eden</a>
 	</h1>
 	<span class="copyright">
-		&copy; 2019 Xio<br>
+		&copy; 2021 Xio<br>
 		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
 		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
 	</span>
@@ -428,7 +522,9 @@
 <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
+
 <script src="/js/script.js"></script>
+
   </div>
 </body>
 </html>

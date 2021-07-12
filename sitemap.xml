@@ -2,45 +2,119 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2021/07/12/Apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%92%8C%E5%8E%8B%E7%BC%A9%E7%9A%84%E4%BD%93%E7%A7%AF%E9%97%AE%E9%A2%98/</loc>
+    
+    <lastmod>2021-07-12</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2018/08/18/Android%20%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91%20%E1%9A%BC%E1%9B%92%EF%BC%88%E4%B8%80%EF%BC%89/</loc>
     
-    <lastmod>2019-02-27T15:00:30.661Z</lastmod>
+    <lastmod>2019-02-27</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2018/08/19/Android%20%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91%20%E1%9A%BC%E1%9B%92%EF%BC%88%E4%BA%8C%EF%BC%89/</loc>
     
-    <lastmod>2019-02-27T14:58:13.476Z</lastmod>
+    <lastmod>2019-02-27</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2018/06/09/%E6%B7%B1%E5%85%A5%20Java%20%E5%A4%9A%E6%80%81/</loc>
     
-    <lastmod>2019-02-24T16:55:40.012Z</lastmod>
+    <lastmod>2019-02-24</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2017/10/03/Hello%20World/</loc>
     
-    <lastmod>2019-02-24T14:46:33.166Z</lastmod>
+    <lastmod>2019-02-24</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2018/12/12/Python%20IO%20-%20%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91/</loc>
     
-    <lastmod>2019-02-14T08:29:45.964Z</lastmod>
+    <lastmod>2019-02-14</lastmod>
     
   </url>
   
   <url>
     <loc>http://yoursite.com/2019/02/01/Android%20%E6%9E%84%E5%BB%BA%E8%84%9A%E6%9C%AC%E4%BB%8EGroovy%E8%BF%81%E7%A7%BB%E5%88%B0Kotlin%20DSL/</loc>
     
-    <lastmod>2019-02-13T07:28:49.891Z</lastmod>
+    <lastmod>2019-02-13</lastmod>
     
+  </url>
+  
+
+  <url>
+    <loc>http://yoursite.com/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  
+  <url>
+    <loc>http://yoursite.com/tags/Android/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/Kotlin/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/Bluetooth/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/Hello/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/Python/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/Java/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+
+  
+  <url>
+    <loc>http://yoursite.com/categories/Python/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/categories/Python/io/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
   </url>
   
 </urlset>
