@@ -8,7 +8,7 @@
   <meta name="description" content="网上已经有不少关于 Kotlin-DSL 很好的文章，但并未能完全解答我迁移过程中遇到的疑问。通过查阅各类文档和源码，我找到了想要的答案。这篇文章记录了我的迁移过程以及对各类问题追溯到源头的答案。 为什么要迁移？因为 Groovy 是动态语言，在用作 Android 构建脚本的时候，经常有些问题：  很差的IDE支持(自动提示等) 性能问题 很多错误在build时才报出，而不是编译期 难以debu">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android 构建脚本从 Groovy 迁移到 Kotlin DSL">
-<meta property="og:url" content="http://yoursite.com/2019/02/01/Android%20%E6%9E%84%E5%BB%BA%E8%84%9A%E6%9C%AC%E4%BB%8EGroovy%E8%BF%81%E7%A7%BB%E5%88%B0Kotlin%20DSL/index.html">
+<meta property="og:url" content="http://edenxio.github.io/2019/02/01/Android%20%E6%9E%84%E5%BB%BA%E8%84%9A%E6%9C%AC%E4%BB%8EGroovy%E8%BF%81%E7%A7%BB%E5%88%B0Kotlin%20DSL/index.html">
 <meta property="og:site_name" content="Eden">
 <meta property="og:description" content="网上已经有不少关于 Kotlin-DSL 很好的文章，但并未能完全解答我迁移过程中遇到的疑问。通过查阅各类文档和源码，我找到了想要的答案。这篇文章记录了我的迁移过程以及对各类问题追溯到源头的答案。 为什么要迁移？因为 Groovy 是动态语言，在用作 Android 构建脚本的时候，经常有些问题：  很差的IDE支持(自动提示等) 性能问题 很多错误在build时才报出，而不是编译期 难以debu">
 <meta property="og:locale" content="zh_CN">
@@ -59,7 +59,7 @@
 		</ul>
 	</nav>
 	<div id="search-form-wrap">
-		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://edenxio.github.io"></form>
 	</div>
 </header>
     <div id="main">
@@ -251,7 +251,7 @@
     <div class="mb-search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
     <input type="search" name="q" results="0" placeholder="Search">
-    <input type="hidden" name="q" value="site:yoursite.com">
+    <input type="hidden" name="q" value="site:edenxio.github.io">
   </form>
 </div>
 <footer id="footer">

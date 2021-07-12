@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Eden">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://edenxio.github.io/index.html">
 <meta property="og:site_name" content="Eden">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Xio">
@@ -53,16 +53,16 @@
 		</ul>
 	</nav>
 	<div id="search-form-wrap">
-		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://edenxio.github.io"></form>
 	</div>
 </header>
     <div id="main">
       
   
-    <article id="post-scrapy-do" class="post">
+    <article id="post-Python 爬虫的管理与定时任务" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
-			<a href="/2020/05/03/scrapy-do/" class="article-date">
+			<a href="/2020/05/03/Python 爬虫的管理与定时任务/" class="article-date">
   <time datetime="2020-05-02T16:00:00.000Z" itemprop="datePublished">2020-05-03</time>
 </a>
 		</span>
@@ -76,26 +76,34 @@
 		
   
     <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2020/05/03/scrapy-do/">Python 爬虫的管理与定时任务</a>
+      <a class="article-title" href="/2020/05/03/Python 爬虫的管理与定时任务/">Python 爬虫的管理与定时任务</a>
     </h1>
   
 
 	</header>
 	<div class="entry-content">
 		
-    	<p> scrapy-do 是一个 scrapy schedule 项目，其特点在于提供了 web 管理页面，可以非常方便的管理爬虫任务。</p>
+			<p>Scrapy 框架让我们很方便就能完成各种规模的爬虫项目，最简单的创建爬虫的方式：</p>
 <ol>
-<li>scrapy-do 实际上是一个 python server 项目，基于 twist 框架，因此不论后续的什么操作，其实都是在和这个 server 通信。因此使用的第一步是启动 server：<br> <code>scrapy-do -n scrapy-do</code><br> <em>建议使用 screen / job 在后台启动</em></li>
-<li>推送爬虫项目到 scrapy-do server<br> <code>scrapy-do-cl push-project</code> <em>注意，它不会直接访问你的项目，这一步其实是把爬虫项目工程放到它 server 的资源里，*<em>因此，如果你的原爬虫项目有任何更改，务必再次执行此操作，保证它执行的是最新的项目代码</em></em></li>
-<li>此时可以通过 <code>scrapy-do-cl status</code> 查看当前的管理状态，或者直接访问它的 web 页面进行管理了（localhost:7654)</li>
-<li>默认只能本地机器打开 localhost:7654 才能访问，如果要自定义配置，需要创建一个配置文件，详情见文档，示例如下： <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line">interfaces = 192.168.31.22:7654 127.0.0.1:7654</span><br></pre></td></tr></table></figure>
- 然后在启动服务的时候指定此配置文件即可：<br> <code>scrapy-do -n scrapy-do --config sp-do.conf</code></li>
+<li>创建一个项目</li>
 </ol>
-<p><strong>爬虫项目通过 scrapy-do 执行的时候的网络环境和你的shell配置没有关系的，如果需要网络代理，需要直接在爬虫项目中设置好</strong></p>
-<h3 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://scrapy-do.readthedocs.io/en/latest/quick-start.html">Docs</a></li>
-</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy startproject tutorial</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>接着可以添加一个爬虫</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy genspider -t crawl cambridge dictionary.cambridge.org/us/dictionary/english-chinese-simplified		</span><br></pre></td></tr></table></figure>
 
+<ol start="3">
+<li>运行爬虫</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl cambridge</span><br></pre></td></tr></table></figure>
+<p>我们可以按实际的业务需求重复第二步，创建大量不同目的的爬虫，但是如何管理这些爬虫呢？</p>
+<p>Scrapy 官方文档推荐使用 <a target="_blank" rel="noopener" href="https://scrapyd.readthedocs.io/en/stable/overview.html"><code>Scrapyd</code></a> 来管理，但实际操作起来稍显复杂，经过一番寻找和比较，发现了 <code>Scrapy-do</code> 这个项目，如果爬虫管理侧重定时任务方面，那 <code>Scrapy-do</code>  是一个更简单易上手的选择。</p>
+			
+				<p class="article-more-link">
+					<a href="/2020/05/03/Python 爬虫的管理与定时任务/#more">继续阅读</a>
+				</p>
+      
     
 	</div>
 	<footer class="entry-footer">
@@ -143,27 +151,13 @@
 	</header>
 	<div class="entry-content">
 		
-    	<p>这段时间在做 Android 多渠道可自定义打包的工作，测试过程中发现经过反编译后再重新压缩签名打包后的 apk 文件总是要比原文件更小一些。</p>
+			<p>这段时间在做 Android 多渠道可自定义打包的工作，测试过程中发现经过反编译后再重新压缩签名打包后的 apk 文件总是要比原文件更小一些。</p>
 <p>而且在部分游戏 apk 中反编译压缩重新出包甚至会导致游戏动画加载黑屏的情况。</p>
-<!--- more --->
-
-<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><p>apk 文件也是一个压缩文件，可以使用 <code>zipinfo</code> 命令查看压缩信息：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; zipinfo test.apk</span></span><br><span class="line"></span><br><span class="line">Zip file size: 17426 bytes, number of entries: 12</span><br><span class="line">-rw----     0.0 fat     2132 b- defN 80-000-00 00:00 AndroidManifest.xml</span><br><span class="line">-rw----     2.4 fat      765 b- defN 80-000-00 00:00 META-INF/CERT.RSA</span><br><span class="line">-rw----     2.4 fat      836 b- defN 80-000-00 00:00 META-INF/CERT.SF</span><br><span class="line">-rw----     2.4 fat      793 b- defN 80-000-00 00:00 META-INF/MANIFEST.MF</span><br><span class="line">-rw----     2.4 fat    10656 b- defN 80-000-00 00:00 classes.dex</span><br><span class="line">-rw----     2.4 fat      642 b- stor 80-000-00 00:00 res/drawable-hdpi-v4/ic_launcher.png</span><br><span class="line">-rw----     2.4 fat      566 b- stor 80-000-00 00:00 res/drawable-mdpi-v4/ic_launcher.png</span><br><span class="line">-rw----     2.4 fat      688 b- stor 80-000-00 00:00 res/drawable-xhdpi-v4/ic_launcher.png</span><br><span class="line">-rw----     2.4 fat      824 b- stor 80-000-00 00:00 res/drawable-xxhdpi-v4/ic_launcher.png</span><br><span class="line">-rw----     0.0 fat      608 b- defN 80-000-00 00:00 res/layout/view.xml</span><br><span class="line">-rw----     0.0 fat      236 b- defN 80-000-00 00:00 res/xml/methods.xml</span><br><span class="line">-rw----     0.0 fat     1904 b- stor 80-000-00 00:00 resources.arsc</span><br><span class="line">12 files, 20650 bytes uncompressed, 10917 bytes compressed:  47.1%</span><br></pre></td></tr></table></figure>
-
-<p><code>stor</code> 表示压缩类型是 <code>store</code>，即不压缩，<code>defN</code> 表示默认压缩, <em>参考 <a target="_blank" rel="noopener" href="https://docs.oracle.com/cd/E88353_01/html/E37839/zipinfo-1.html">oracle zipinfo</a></em></p>
-<p>可以发现，Android apk 对于很多媒体资源类型的文件是不压缩的。而如果我在反编译之后直接使用 <code>zip</code> 命令压缩打包，那默认会对所有文件做压缩处理，最终得到的 apk 体积就会更小一些。 </p>
-<p>这样做自然是有风险的，经过测试，如果对一个游戏包做这样的处理，有可能会导致游戏打开直接黑屏，实际上它应该是有一段开屏动画的。Android 游戏的开屏动画往往是一个视频，经过压缩后可能就无法正常播放。</p>
-<h2 id="非压缩处理"><a href="#非压缩处理" class="headerlink" title="非压缩处理"></a>非压缩处理</h2><p>参考官方文档的<a target="_blank" rel="noopener" href="https://developer.android.com/google/play/expansion-files.html#skipping-zip-compression-of-media-files">说明</a>, 特别是对于游戏类的 App 而言，对这类文件需要按非压缩类型处理。处理方式：</p>
-<p><code>zip -rn .mp4:.flv:.mp3:.gif:.lua:assets/bundle.json</code></p>
-<ul>
-<li><code>-n</code> 表示不压缩此后缀的文件，多个规则用<code>:</code>隔开</li>
-<li><code>-x</code> 表示忽略该文件，不加入压缩包</li>
-</ul>
-<p>实际上，使用 <code>apktool</code> 反编译后的文件夹里有一个配置文件<code>apktool.yml</code> ，里面有一项 <code>doNotCompress</code> ：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">doNotCompress:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">resources.arsc</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">assets/.appkey</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">png</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">jpg</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">ogg</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">mp3</span></span><br></pre></td></tr></table></figure>
-
-<p>表示原 apk 中以非压缩形式存储的文件类型/文件。因此如果我们需要在反编译之后做自定义操作，并使用 <code>zip</code> 打包的话，可以结合 <code>apktool.yml</code> 这个文件对原 apk 包内的非压缩文件做特殊处理。</p>
-
+			
+				<p class="article-more-link">
+					<a href="/2019/10/06/Apk 反编译和压缩的体积问题/#more">继续阅读</a>
+				</p>
+      
     
 	</div>
 	<footer class="entry-footer">
@@ -274,40 +268,12 @@
 	</header>
 	<div class="entry-content">
 		
-    	<p>今天在写 Python 单元测试的时候需要获取到待测试方法的<code>print()</code>输出，在<code>Shell</code>中使用管道重定向输出很容易，但是在<code>Python</code>中如何进行呢？</p>
-<!--- more --->
-
-<h1 id="Python-中的标准输入输出"><a href="#Python-中的标准输入输出" class="headerlink" title="Python 中的标准输入输出"></a>Python 中的标准输入输出</h1><h2 id="print-和-sys-stdout"><a href="#print-和-sys-stdout" class="headerlink" title="print 和 sys.stdout"></a>print 和 sys.stdout</h2><p>当我们在 Python 中打印值调用 <code>print(value)</code> 时候，等价于调用 <code>sys.stdout.write(value+&#39;\n&#39;)</code></p>
-<p>print 将内容打印到了控制台，然后追加了一个换行符</p>
-<h2 id="input-和-sys-stdin"><a href="#input-和-sys-stdin" class="headerlink" title="input 和 sys.stdin"></a>input 和 sys.stdin</h2><p>当我们用 raw_input(‘promption: ‘) 时，事实上是先把提示信息输出，然后捕获输入</p>
-<p>以下两组在实际上等价：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hi=raw_input(&#x27;Hi~&#x27;)</span><br><span class="line"></span><br><span class="line">sys.stdout.write(&#x27;Hi~&#x27;)</span><br><span class="line"># -1 to discard the &#x27;\n&#x27; in input stream</span><br><span class="line">hi=sys.stdin.readline()[:-1] </span><br></pre></td></tr></table></figure>
-<p>而在Python 3中新增的<code>input()</code>函数则在此基础上，增加了类型判断的处理，尝试将输入解析为适当的数据类型。</p>
-<blockquote>
-<p>实际上 print 或者 raw_input 在 cpython 中的源码要复杂得多，这里‘等价’的仅是示意其与标准输入输出直接相关。源码可以参考文末给出的链接</p>
-</blockquote>
-<h1 id="输出重定向"><a href="#输出重定向" class="headerlink" title="输出重定向"></a>输出重定向</h1><p>默认的 <code>sys.stdout</code> 指向控制台，我们可以重定向到其他流(或者具有<code>write</code>方法的对象)：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#标准输出重定向至文件</span><br><span class="line">with open(&#x27;out.txt&#x27;, &#x27;w+&#x27;) as f:</span><br><span class="line">    sys.stdout = f </span><br><span class="line"></span><br><span class="line"># 标准输出重定向至字符流</span><br><span class="line">sys.stdout = strout = StringIO()</span><br></pre></td></tr></table></figure>
-<p>完成任务后最好恢复标准输出至原先的地址(默认控制台)：</p>
-<ul>
-<li><p>可以在重定向前获取<code>stdout</code>的默认引用，恢复的时候再指向这个引用即可</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">orig_stdout = sys.stdout</span><br><span class="line"># ...$重定向代码$...</span><br><span class="line"># ...print(&#x27;hahaha...&#x27;)...</span><br><span class="line"></span><br><span class="line"># 恢复</span><br><span class="line">sys.stdout = orig_stdout</span><br></pre></td></tr></table></figure></li>
-<li><p>或使用<code>sys.__stdout__</code>，其保存程序开始时<code>sys.stdout</code>的原始值，且不受重定向影响</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># ...$重定向代码$...</span><br><span class="line"># ...print(&#x27;hahaha...&#x27;)...</span><br><span class="line">sys.stdout = sys.__stdout__</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>结合上下文管理器，我们还可以这样：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@contextmanager</span><br><span class="line">def stdout_redirected(new_stdout):</span><br><span class="line">    save_stdout = sys.stdout</span><br><span class="line">    sys.stdout = new_stdout</span><br><span class="line">    try:</span><br><span class="line">        yield None</span><br><span class="line">    finally:</span><br><span class="line">        sys.stdout = save_stdout</span><br><span class="line"></span><br><span class="line"># 使用</span><br><span class="line">with opened(filename, &quot;w&quot;) as f:</span><br><span class="line">    with stdout_redirected(f):</span><br><span class="line">        print &quot;Hello world&quot;</span><br></pre></td></tr></table></figure>
-
-<p>应用示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">from io import StringIO</span><br><span class="line"></span><br><span class="line"># parse 函数直接将&#x27;解析&#x27;结果打印出来了，我们需要判断解析是否正确</span><br><span class="line"></span><br><span class="line">def parse(query):</span><br><span class="line">    print(f&#x27;query: &#123;query&#125;&#x27;)</span><br><span class="line"></span><br><span class="line">def test(query):</span><br><span class="line">    sys.stdout = strdout = StringIO()</span><br><span class="line">    parse(query)</span><br><span class="line">    sys.stdout = sys.__stdout__</span><br><span class="line">    return strdout.getvalue()</span><br><span class="line"></span><br><span class="line">result = test(&#x27;This message is for query&#x27;)</span><br><span class="line">print(result.split()[1])</span><br><span class="line"></span><br><span class="line"># output：This</span><br></pre></td></tr></table></figure>
-<p>同样的，<code>sys.stderr</code>, <code>sys.stdin</code> 也都可以被重定向到多个地址。</p>
-<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/python/cpython/blob/3.6/Python/sysmodule.c">cpython 3.6 - sys</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/python/cpython/blob/c41523ac2447b0e86b702f58458f3b3548439c8b/Python/bltinmodule.c#L1864">cpython 3.6 - input</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.python.org/3/library/sys.html#sys.__stdout__">python 3 doc - sys.__stdout__</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0343/#use-cases">PEP 343 – The “with” Statement use-case</a></li>
-</ul>
-
+			<p>今天在写 Python 单元测试的时候需要获取到待测试方法的<code>print()</code>输出，在<code>Shell</code>中使用管道重定向输出很容易，但是在<code>Python</code>中如何进行呢？</p>
+			
+				<p class="article-more-link">
+					<a href="/2018/12/12/Python IO - 输出重定向/#more">继续阅读</a>
+				</p>
+      
     
 	</div>
 	<footer class="entry-footer">
@@ -359,7 +325,7 @@
 	</header>
 	<div class="entry-content">
 		
-			<p><a target="_blank" rel="noopener" href="https://edenxio.github.io/2018/08/18/Android%20%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91%20%E1%9A%BC%E1%9B%92%EF%BC%88%E4%B8%80%EF%BC%89/">上一篇</a>对蓝牙协议栈做了一个简要的说明，本篇回到主题，谈谈 Android 中的蓝牙开发。</p>
+			<p><a href="https://edenxio.github.io/2018/08/18/Android%20%E8%93%9D%E7%89%99%E5%BC%80%E5%8F%91%20%E1%9A%BC%E1%9B%92%EF%BC%88%E4%B8%80%EF%BC%89/">上一篇</a>对蓝牙协议栈做了一个简要的说明，本篇回到主题，谈谈 Android 中的蓝牙开发。</p>
 <h2 id="发展"><a href="#发展" class="headerlink" title="发展"></a>发展</h2><p>Android 1.0 开始就支持了蓝牙2.0，开始的时候仅支持 headset profile 和 hands-free profile，1.5（<code>capcake</code>）开始支持了 A2dp，2.0 支持了蓝牙 2.1，并提供了 RFCOMM 相关 API…，到 Android 4.3 终于开始支持低功耗蓝牙，但只支持BLE的中心设备模式，到Android 5.0 才支持外设模式。</p>
 <p>虽然一直在加大对蓝牙系统的支持，但在初期的 Android 蓝牙开发中 经常受到诟病的一点是 API 不够稳定，并且还有许多标准通信类型还不支持。其原因主要和使用的蓝牙堆栈实现有关。</p>
 <p>在 Android 的早期版本中，整个蓝牙堆栈都是基于 BlueZ 构建的，BlueZ 是 Linux 内核中使用的开源堆栈。这个堆栈非常成熟和稳定。然而在Android环境中，BlueZ 存在一些问题，主要与其附加的 GPL 许可协议有关。为了避免与其他 Apache 许可的 Android 堆栈冲突，BlueZ 需要在一个与特殊守护进程（bluetoothd）交互的单独进程中运行。这些处理带来了大量额外的开销。</p>
@@ -516,7 +482,7 @@
     <div class="mb-search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
     <input type="search" name="q" results="0" placeholder="Search">
-    <input type="hidden" name="q" value="site:yoursite.com">
+    <input type="hidden" name="q" value="site:edenxio.github.io">
   </form>
 </div>
 <footer id="footer">

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Python 爬虫的管理与定时任务 | Eden</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Scrapy 框架让我们很方便就能完成各种规模的爬虫项目，最简单的创建爬虫的方式：  创建一个项目  1scrapy startproject tutorial  接着可以添加一个爬虫  1scrapy genspider -t crawl cambridge dictionary.cambridge.org&#x2F;us&#x2F;dictionary&#x2F;english-chinese-simplified">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 爬虫的管理与定时任务">
+<meta property="og:url" content="http://edenxio.github.io/2020/05/03/Python%20%E7%88%AC%E8%99%AB%E7%9A%84%E7%AE%A1%E7%90%86%E4%B8%8E%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/index.html">
+<meta property="og:site_name" content="Eden">
+<meta property="og:description" content="Scrapy 框架让我们很方便就能完成各种规模的爬虫项目，最简单的创建爬虫的方式：  创建一个项目  1scrapy startproject tutorial  接着可以添加一个爬虫  1scrapy genspider -t crawl cambridge dictionary.cambridge.org&#x2F;us&#x2F;dictionary&#x2F;english-chinese-simplified">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://edenxio.github.io/images/scrapy-do.png">
+<meta property="article:published_time" content="2020-05-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-12T08:26:18.080Z">
+<meta property="article:author" content="Xio">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Scrapy">
+<meta property="article:tag" content="爬虫">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://edenxio.github.io/images/scrapy-do.png">
+  
+    <link rel="alternative" href="/atom.xml" title="Eden" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-134333276-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Eden</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">首页</a></li><li><a href="/archives">归档</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://edenxio.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Python 爬虫的管理与定时任务" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2020/05/03/Python 爬虫的管理与定时任务/" class="article-date">
+  <time datetime="2020-05-02T16:00:00.000Z" itemprop="datePublished">2020-05-03</time>
+</a>
+		</span>
+		<span class="meta-elements author">Xio</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Python 爬虫的管理与定时任务
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Scrapy 框架让我们很方便就能完成各种规模的爬虫项目，最简单的创建爬虫的方式：</p>
+<ol>
+<li>创建一个项目</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy startproject tutorial</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>接着可以添加一个爬虫</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy genspider -t crawl cambridge dictionary.cambridge.org/us/dictionary/english-chinese-simplified		</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>运行爬虫</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy crawl cambridge</span><br></pre></td></tr></table></figure>
+<p>我们可以按实际的业务需求重复第二步，创建大量不同目的的爬虫，但是如何管理这些爬虫呢？</p>
+<p>Scrapy 官方文档推荐使用 <a target="_blank" rel="noopener" href="https://scrapyd.readthedocs.io/en/stable/overview.html"><code>Scrapyd</code></a> 来管理，但实际操作起来稍显复杂，经过一番寻找和比较，发现了 <code>Scrapy-do</code> 这个项目，如果爬虫管理侧重定时任务方面，那 <code>Scrapy-do</code>  是一个更简单易上手的选择。</p>
+<span id="more"></span>
+
+<h2 id="Scrapy-do-使用介绍"><a href="#Scrapy-do-使用介绍" class="headerlink" title="Scrapy-do 使用介绍"></a>Scrapy-do 使用介绍</h2><p>scrapy-do 是一个 scrapy schedule 项目，其特点在于提供了 web 管理页面，可以非常方便直观地管理爬虫任务。</p>
+<ol>
+<li><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install scrapy-do</span><br></pre></td></tr></table></figure></li>
+<li><p>scrapy-do 实际上是一个 python server 项目，基于 <code>twist</code> 框架，因此不论后续的什么操作，其实都是在和这个 server 通信。因此安装完成后，使用的第一步是启动 server：</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy-do -n scrapy-do</span><br></pre></td></tr></table></figure>
+
+<p> <em>这个 server 需要一直保持运行，建议使用后台任务</em></p>
+</li>
+<li><p>推送爬虫项目到 scrapy-do server</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy-do-cl push-project</span><br></pre></td></tr></table></figure>
+<p> <em>注意，它不会直接访问你的项目，这一步其实是把爬虫项目工程放到它 server 的资源里，*<em>因此，如果你的原爬虫项目有任何更改，务必再次执行此操作，保证它执行的是最新的项目代码</em></em></p>
+</li>
+<li><p>此时可以通过 <code>scrapy-do-cl status</code> 查看当前的管理状态，或者直接访问它的 web 页面进行管理了（localhost:7654)</p>
+<p><img src="/images/scrapy-do.png" alt="scrapy-do-webui"></p>
+</li>
+</ol>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ul>
+<li><p>默认只能本地机器打开 localhost:7654 才能访问，如果要自定义配置，需要创建一个配置文件，详情见文档，示例如下：</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line">interfaces = 192.168.31.22:7654 127.0.0.1:7654</span><br></pre></td></tr></table></figure>
+<p>  然后在启动服务的时候指定此配置文件即可：</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scrapy-do -n scrapy-do --config sp-do.conf</span><br></pre></td></tr></table></figure></li>
+<li><p>爬虫项目通过 scrapy-do 执行的时候的网络环境和你的 shell 配置没有关系的，如果需要网络代理，需要直接在爬虫项目中进行设置</p>
+</li>
+</ul>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://scrapy-do.readthedocs.io/en/latest/quick-start.html">Scrapy-Do Docs</a></li>
+<li> <a target="_blank" rel="noopener" href="https://docs.scrapy.org/en/latest/intro/tutorial.html">Scrapy Tutorial</a></li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/06/Apk 反编译和压缩的体积问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Apk 反编译和压缩的体积问题
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:edenxio.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Eden</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2021 Xio<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
