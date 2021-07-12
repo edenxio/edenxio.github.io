@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2021-07-12T07:11:28.768Z</updated>
+  <updated>2021-07-12T07:21:53.927Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Python 爬虫的管理与定时任务</title>
+    <link href="http://yoursite.com/2020/05/03/scrapy-do/"/>
+    <id>http://yoursite.com/2020/05/03/scrapy-do/</id>
+    <published>2020-05-02T16:00:00.000Z</published>
+    <updated>2021-07-12T07:21:53.927Z</updated>
+    
+    <content type="html"><![CDATA[<p> scrapy-do 是一个 scrapy schedule 项目，其特点在于提供了 web 管理页面，可以非常方便的管理爬虫任务。</p><ol><li>scrapy-do 实际上是一个 python server 项目，基于 twist 框架，因此不论后续的什么操作，其实都是在和这个 server 通信。因此使用的第一步是启动 server：<br> <code>scrapy-do -n scrapy-do</code><br> <em>建议使用 screen / job 在后台启动</em></li><li>推送爬虫项目到 scrapy-do server<br> <code>scrapy-do-cl push-project</code> <em>注意，它不会直接访问你的项目，这一步其实是把爬虫项目工程放到它 server 的资源里，*<em>因此，如果你的原爬虫项目有任何更改，务必再次执行此操作，保证它执行的是最新的项目代码</em></em></li><li>此时可以通过 <code>scrapy-do-cl status</code> 查看当前的管理状态，或者直接访问它的 web 页面进行管理了（localhost:7654)</li><li>默认只能本地机器打开 localhost:7654 才能访问，如果要自定义配置，需要创建一个配置文件，详情见文档，示例如下： <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line">interfaces = 192.168.31.22:7654 127.0.0.1:7654</span><br></pre></td></tr></table></figure> 然后在启动服务的时候指定此配置文件即可：<br> <code>scrapy-do -n scrapy-do --config sp-do.conf</code></li></ol><p><strong>爬虫项目通过 scrapy-do 执行的时候的网络环境和你的shell配置没有关系的，如果需要网络代理，需要直接在爬虫项目中设置好</strong></p><h3 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h3><ul><li><a href="https://scrapy-do.readthedocs.io/en/latest/quick-start.html">Docs</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt; scrapy-do 是一个 scrapy schedule 项目，其特点在于提供了 web 管理页面，可以非常方便的管理爬虫任务。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;scrapy-do 实际上是一个 python server 项目，基于 twist 框架，因此不论后续的什么操作
+      
+    
+    </summary>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="Scrapy" scheme="http://yoursite.com/tags/Scrapy/"/>
+    
+      <category term="爬虫" scheme="http://yoursite.com/tags/%E7%88%AC%E8%99%AB/"/>
+    
+  </entry>
   
   <entry>
     <title>Apk 反编译和压缩的体积问题</title>
@@ -180,30 +209,6 @@
     
     
       <category term="Java" scheme="http://yoursite.com/tags/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2017/10/03/Hello%20World/"/>
-    <id>http://yoursite.com/2017/10/03/Hello World/</id>
-    <published>2017-10-02T16:00:00.000Z</published>
-    <updated>2019-02-24T14:46:33.166Z</updated>
-    
-    <content type="html"><![CDATA[<p>Hello World !</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Hello World !&lt;/p&gt;
-
-      
-    
-    </summary>
-    
-    
-      <category term="Hello" scheme="http://yoursite.com/tags/Hello/"/>
     
   </entry>
   

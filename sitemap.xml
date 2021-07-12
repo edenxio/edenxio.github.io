@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2020/05/03/scrapy-do/</loc>
+    
+    <lastmod>2021-07-12</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2019/10/06/Apk%20%E5%8F%8D%E7%BC%96%E8%AF%91%E5%92%8C%E5%8E%8B%E7%BC%A9%E7%9A%84%E4%BD%93%E7%A7%AF%E9%97%AE%E9%A2%98/</loc>
     
     <lastmod>2021-07-12</lastmod>
@@ -24,13 +31,6 @@
   
   <url>
     <loc>http://yoursite.com/2018/06/09/%E6%B7%B1%E5%85%A5%20Java%20%E5%A4%9A%E6%80%81/</loc>
-    
-    <lastmod>2019-02-24</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/10/03/Hello%20World/</loc>
     
     <lastmod>2019-02-24</lastmod>
     
@@ -81,13 +81,6 @@
   </url>
   
   <url>
-    <loc>http://yoursite.com/tags/Hello/</loc>
-    <lastmod>2021-07-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://yoursite.com/tags/Java/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
@@ -96,6 +89,20 @@
   
   <url>
     <loc>http://yoursite.com/tags/Python/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/Scrapy/</loc>
+    <lastmod>2021-07-12</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/tags/%E7%88%AC%E8%99%AB/</loc>
     <lastmod>2021-07-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

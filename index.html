@@ -59,6 +59,66 @@
     <div id="main">
       
   
+    <article id="post-scrapy-do" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2020/05/03/scrapy-do/" class="article-date">
+  <time datetime="2020-05-02T16:00:00.000Z" itemprop="datePublished">2020-05-03</time>
+</a>
+		</span>
+		<span class="meta-elements author">Xio</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2020/05/03/scrapy-do/">Python 爬虫的管理与定时任务</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p> scrapy-do 是一个 scrapy schedule 项目，其特点在于提供了 web 管理页面，可以非常方便的管理爬虫任务。</p>
+<ol>
+<li>scrapy-do 实际上是一个 python server 项目，基于 twist 框架，因此不论后续的什么操作，其实都是在和这个 server 通信。因此使用的第一步是启动 server：<br> <code>scrapy-do -n scrapy-do</code><br> <em>建议使用 screen / job 在后台启动</em></li>
+<li>推送爬虫项目到 scrapy-do server<br> <code>scrapy-do-cl push-project</code> <em>注意，它不会直接访问你的项目，这一步其实是把爬虫项目工程放到它 server 的资源里，*<em>因此，如果你的原爬虫项目有任何更改，务必再次执行此操作，保证它执行的是最新的项目代码</em></em></li>
+<li>此时可以通过 <code>scrapy-do-cl status</code> 查看当前的管理状态，或者直接访问它的 web 页面进行管理了（localhost:7654)</li>
+<li>默认只能本地机器打开 localhost:7654 才能访问，如果要自定义配置，需要创建一个配置文件，详情见文档，示例如下： <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line">interfaces = 192.168.31.22:7654 127.0.0.1:7654</span><br></pre></td></tr></table></figure>
+ 然后在启动服务的时候指定此配置文件即可：<br> <code>scrapy-do -n scrapy-do --config sp-do.conf</code></li>
+</ol>
+<p><strong>爬虫项目通过 scrapy-do 执行的时候的网络环境和你的shell配置没有关系的，如果需要网络代理，需要直接在爬虫项目中设置好</strong></p>
+<h3 id="Refs"><a href="#Refs" class="headerlink" title="Refs"></a>Refs</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://scrapy-do.readthedocs.io/en/latest/quick-start.html">Docs</a></li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Scrapy/" rel="tag">Scrapy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Apk 反编译和压缩的体积问题" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
@@ -437,55 +497,6 @@
 			<span class="tags">
 				
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
-
-			</span>
-		</div>
-	</footer>
-	
-</article>
-
-
-	<hr class="article-devider">
-
-
-
-  
-    <article id="post-Hello World" class="post">
-	<footer class="entry-meta-header">
-		<span class="meta-elements date">
-			<a href="/2017/10/03/Hello World/" class="article-date">
-  <time datetime="2017-10-02T16:00:00.000Z" itemprop="datePublished">2017-10-03</time>
-</a>
-		</span>
-		<span class="meta-elements author">Xio</span>
-		<div class="commentscount">
-			
-		</div>
-	</footer>
-	
-	<header class="entry-header">
-		
-  
-    <h1 itemprop="name" class="entry-title">
-      <a class="article-title" href="/2017/10/03/Hello World/">Hello World</a>
-    </h1>
-  
-
-	</header>
-	<div class="entry-content">
-		
-    	<p>Hello World !</p>
-
-    
-	</div>
-	<footer class="entry-footer">
-		<div class="entry-meta-footer">
-			<span class="category">
-				
-			</span>
-			<span class="tags">
-				
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hello/" rel="tag">Hello</a></li></ul>
 
 			</span>
 		</div>
