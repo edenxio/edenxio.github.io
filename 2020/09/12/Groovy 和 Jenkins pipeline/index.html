@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Groovy 和 Jenkins pipeline | Eden</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="公司项目一直使用的 Jenkins 作为 java&#x2F;Android 的 CI&#x2F;CD 工具，之前需求比较简单，直接使用 Jenkins 提供的管理后台 UI 操作就能完成。后来有一些新的构建需求，我最初是使用 Python 处理的，近期全部转到了 gradle 脚本 + Jenkins pipeline 的实现。这两者使用的都是 groovy，使用过程中发现，其实 groovy 很多操作比 Pyth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Groovy 和 Jenkins pipeline">
+<meta property="og:url" content="http://edenxio.github.io/2020/09/12/Groovy%20%E5%92%8C%20Jenkins%20pipeline/index.html">
+<meta property="og:site_name" content="Eden">
+<meta property="og:description" content="公司项目一直使用的 Jenkins 作为 java&#x2F;Android 的 CI&#x2F;CD 工具，之前需求比较简单，直接使用 Jenkins 提供的管理后台 UI 操作就能完成。后来有一些新的构建需求，我最初是使用 Python 处理的，近期全部转到了 gradle 脚本 + Jenkins pipeline 的实现。这两者使用的都是 groovy，使用过程中发现，其实 groovy 很多操作比 Pyth">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-13T07:18:44.075Z">
+<meta property="article:author" content="Xio">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Eden" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-134333276-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Eden</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">首页</a></li><li><a href="/archives">归档</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://edenxio.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Groovy 和 Jenkins pipeline" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2020/09/12/Groovy 和 Jenkins pipeline/" class="article-date">
+  <time datetime="2020-09-11T16:00:00.000Z" itemprop="datePublished">2020-09-12</time>
+</a>
+		</span>
+		<span class="meta-elements author">Xio</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Groovy 和 Jenkins pipeline
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>公司项目一直使用的 Jenkins 作为 java/Android 的 CI/CD 工具，之前需求比较简单，直接使用 Jenkins 提供的管理后台 UI 操作就能完成。后来有一些新的构建需求，我最初是使用 Python 处理的，近期全部转到了 gradle 脚本 + Jenkins pipeline 的实现。这两者使用的都是 groovy，使用过程中发现，其实 groovy 很多操作比 Python 都要方便。</p>
+<p>先介绍一些 groovy 操作便捷和需要注意的地方</p>
+<span id="more"></span>
+
+<h2 id="File"><a href="#File" class="headerlink" title="File"></a>File</h2><h3 id="join-file-path"><a href="#join-file-path" class="headerlink" title="join file path"></a>join file path</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> dataPath = Paths.get(<span class="string">&quot;/User/xxx&quot;</span>,<span class="string">&quot;data/log&quot;</span>)</span><br><span class="line"><span class="keyword">def</span> file = dataPath.toFile() <span class="comment">// def file = new File(&quot;.&quot;)</span></span><br><span class="line">file.eachFile &#123; f -&gt;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="读写文件"><a href="#读写文件" class="headerlink" title="读写文件"></a>读写文件</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> File(<span class="string">&quot;.&quot;</span>).text</span><br><span class="line"><span class="comment">// even use `as String[]`</span></span><br></pre></td></tr></table></figure>
+<p>更多示例可以参考：<a target="_blank" rel="noopener" href="https://www.baeldung.com/groovy-io">groovy-io</a></p>
+<h2 id="正则"><a href="#正则" class="headerlink" title="正则"></a>正则</h2><p>groovy 提供了很多字符串表示正则的写法：</p>
+<ul>
+<li><code>&#39;\d+&#39;</code> 单引号</li>
+<li><code>&quot;\d+&quot;</code> 双引号</li>
+<li><code>/\d+/</code> 斜杠</li>
+<li><code>$\d+$</code> 美元符号</li>
+</ul>
+<p>*<em>我使用斜杠较多，可以应付很多需要转义的情况</em></p>
+<p>groovy 还提供了很多特有的操作符：</p>
+<ul>
+<li><code>~</code> 模式符，后面紧跟正则表达式字符串即会转换为 <code>java.util.regex.Pattern</code> 对象, 如：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> p = <span class="regexp">~/\d+/</span></span><br><span class="line"><span class="comment">// p 就是一个 Pattern 对象了</span></span><br></pre></td></tr></table></figure></li>
+<li><code>=~</code> 正则搜寻符，相当与执行正则的 find 操作，返回 Matcher 对象，在 groovy 里可以直接对其进行遍历：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> matcher = result =~ <span class="regexp">/versionCode=&#x27;(\S+)&#x27;\s+versionName=&#x27;(\S+)&#x27;/</span></span><br><span class="line"><span class="comment">// matcher[0] 就是搜索结果，具体group结果在子数组里</span></span><br><span class="line"><span class="keyword">def</span> version_code = matcher[<span class="number">0</span>][<span class="number">1</span>]</span><br><span class="line"><span class="keyword">def</span> version_name = matcher[<span class="number">0</span>][<span class="number">2</span>]</span><br></pre></td></tr></table></figure></li>
+<li><code>==~</code> 正则匹配符，相当与执行 match 操作，返回值 boolean 类型</li>
+</ul>
+<h2 id="执行-shell-命令"><a href="#执行-shell-命令" class="headerlink" title="执行 shell 命令"></a>执行 shell 命令</h2><p>直接 <code>&#39;ls -al&#39;.execute().text</code> 就可以执行并拿到结果，非常方便，更 Robust 的代码：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> result = <span class="keyword">new</span> StringBuilder()</span><br><span class="line"><span class="keyword">def</span> error = <span class="keyword">new</span> StringBuilder()</span><br><span class="line"><span class="keyword">def</span> cmd_newApkInfo = cmd.execute()</span><br><span class="line">cmd_newApkInfo.consumeProcessOutput(result, error)</span><br><span class="line">cmd_newApkInfo.waitFor()</span><br></pre></td></tr></table></figure>
+
+<h2 id="List-Map"><a href="#List-Map" class="headerlink" title="List/Map"></a>List/Map</h2><ol>
+<li>创建<ul>
+<li>list: <code>def a = []</code> </li>
+<li>map 就不太一样了: <code>def m = [:]</code>, <code>def m = [name: &quot;John&quot;, age:123]</code> </li>
+</ul>
+</li>
+<li><code>find</code>, <code>findAll</code>, <code>collect</code><code>find</code> 和 <code>findAll</code> 起到过滤作用，前者返回一个元素，后者返回集合； 相当于其他语言里的 <code>map</code> 转换方法。</li>
+</ol>
+<h2 id="变量作用域的问题"><a href="#变量作用域的问题" class="headerlink" title="变量作用域的问题"></a>变量作用域的问题</h2><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// foo.groovy</span></span><br><span class="line">x = <span class="number">42</span></span><br><span class="line"><span class="keyword">def</span> y = <span class="number">40</span></span><br><span class="line"><span class="keyword">def</span> f() &#123;</span><br><span class="line">    println(x)  <span class="comment">// 42</span></span><br><span class="line">    println(y)  <span class="comment">// error</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">f()</span><br></pre></td></tr></table></figure>
+<p>这里top-level的俩变量是不一样的，x 没有类型声明，将触发 <a target="_blank" rel="noopener" href="https://docs.groovy-lang.org/3.0.7/html/gapi/index.html?groovy/lang/Script.html#getBinding()">script binding</a>，变成“全局变量”(script-scope)，而 y 是本地变量，除了在top-level直接使用外，无法被其他方法调用。实际上看看 groovy 转换后的代码就一目了然了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">foo</span></span>&#123;</span><br><span class="line">    <span class="comment">// 成员变量，“全局可访问”</span></span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">42</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        println(x)  <span class="comment">// 42</span></span><br><span class="line">        println(y)  <span class="comment">// error</span></span><br><span class="line">    &#125;       </span><br><span class="line"></span><br><span class="line">   <span class="comment">// top-level 的代码都是放到 run 方法里的</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> y = <span class="number">40</span>;</span><br><span class="line">        f();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="title">main</span><span class="params">(args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> foo().run();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>但是，不写任何声明的变量在 gradle 中是不能使用的</strong>，Android gradle 中如果想实现 script-scope variable，只能通过给 赋给 project/ext 的方式实现：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// build.gradle </span></span><br><span class="line">ext.x = <span class="number">42</span> </span><br><span class="line"><span class="keyword">def</span> f()&#123;</span><br><span class="line">    <span class="keyword">println</span> x <span class="comment">//42</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><ul>
+<li>强制转换符 <code>as</code>, 这和 Kotlin 的还不一样：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Integer x = <span class="number">123</span></span><br><span class="line"><span class="comment">// Java ,直接抛出 ClassCastException 异常</span></span><br><span class="line">String s = (String) x </span><br><span class="line"><span class="comment">// Kotlin ,同 Java</span></span><br><span class="line">String s = x <span class="keyword">as</span> String</span><br><span class="line"><span class="comment">// Groovy ,正常转换到 String</span></span><br><span class="line">String s = x <span class="keyword">as</span> String</span><br></pre></td></tr></table></figure>
+  如果是不同类型，groovy 这实际上是创建了一个新的对象，而这个转换方法( <code>asType()</code>)是需要实现的，如果是自定义类型那需要我们自己实现。具体参考 <a target="_blank" rel="noopener" href="http://groovy-lang.org/operators.html#_coercion_operator">Coercion operator</a></li>
+</ul>
+<h1 id="Jenkins-Pipeline"><a href="#Jenkins-Pipeline" class="headerlink" title="Jenkins Pipeline"></a>Jenkins Pipeline</h1><p>Pipeline 是 Jenkins 提供的一种持续交付的模式，我们可以通过编写 pipeline 脚本文件 (Jenkinsfile) 来高效地实现我们的 CD 流程。<br>Jenkinsfile 脚本文件分为两种：</p>
+<h2 id="Declarative-Pipeline"><a href="#Declarative-Pipeline" class="headerlink" title="Declarative Pipeline"></a>Declarative Pipeline</h2><p>  集成了很多 Jenkins 新提供的很多 Api 功能，可以声明式的便捷调用。<br>  比如 jenkins 构建完成后你要发一条结果通知：<br>  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    agent any</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(<span class="string">&#x27;No-op&#x27;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh <span class="string">&#x27;ls&#x27;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    post &#123;</span><br><span class="line">        always &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&#x27;One way or another, I have finished&#x27;</span></span><br><span class="line">            deleteDir() /* clean up our workspace */</span><br><span class="line">        &#125;</span><br><span class="line">        success &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&#x27;I succeeded!&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        unstable &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&#x27;I am unstable :/&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        failure &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&#x27;I failed :(&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        changed &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&#x27;Things were different before...&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>  <code>post</code> 就是完成后会执行的方法，</p>
+<h2 id="Scripted-Pipeline"><a href="#Scripted-Pipeline" class="headerlink" title="Scripted Pipeline"></a>Scripted Pipeline</h2><p>  纯“脚本式”的风格，Jenkins 提供的 api 很少。</p>
+<p>同样的上面的需求， scripted 实现是这样：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        stage(<span class="string">&#x27;No-op&#x27;</span>) &#123;</span><br><span class="line">            sh <span class="string">&#x27;ls&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    catch (exc) &#123;</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&#x27;I failed&#x27;</span></span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        <span class="keyword">if</span> (currentBuild.result == <span class="string">&#x27;UNSTABLE&#x27;</span>) &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&#x27;I am unstable :/&#x27;</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">echo</span> <span class="string">&#x27;One way or another, I have finished&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，只能使用 <code>try catch</code>的方式实现(<em><code>currentBuild</code> 是由 jenkins 提供的，可以直接使用</em>)。</p>
+<p>另外，从上面俩例子也可以说明两者的格式也是不一样的，前者整个构建过程需要这样表述：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    agent any</span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(<span class="string">&quot;Sources&quot;</span>)&#123;</span><br><span class="line">            steps &#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        stage(<span class="string">&#x27;Test&#x27;</span>) &#123; </span><br><span class="line">            steps &#123;</span><br><span class="line">                // </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>pipeline 代码块是声明式的核心主体，其包含多个 stage，表示当前执行的阶段，名称可以自定义，stage 里又由多个 steps 构成，表示执行的具体步骤。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">    stage(<span class="string">&#x27;Build&#x27;</span>) &#123; </span><br><span class="line">        // </span><br><span class="line">    &#125;</span><br><span class="line">    stage(<span class="string">&#x27;Test&#x27;</span>) &#123; </span><br><span class="line">        // </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>node 代码块则是脚本式的核心主体，其直接包含多个 stage（其实有没有 stage 不重要），我们把具体的执行代码直接放到对应的 stage 下即可，这里没有 step 等内容。写 stage 的主要目的是可以在 jenkins 有直观的 ui 展示，比较方便。 </p>
+<p>pipeline 脚本主要基于 groovy，声明式和脚本式的环境、插件都是共用的(调用方式上会有些不一样)，声明式出现的目的是 Jenkins 团队认为 groovy 的学习曲线还是比较陡峭，所以整了个声明式的，方便不了解 groovy 语法的开发者也可以使用 pipeline。<a target="_blank" rel="noopener" href="https://www.jenkins.io/doc/book/pipeline/syntax/#compare">Syntax Comparison</a></p>
+<h3 id="Jenkins-部分-Api-说明"><a href="#Jenkins-部分-Api-说明" class="headerlink" title="Jenkins 部分 Api 说明"></a>Jenkins 部分 Api 说明</h3><ol>
+<li><code>dir</code><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">    // 工作目录 /workspace</span><br><span class="line">    stage(<span class="string">&quot;Build&quot;</span>)&#123;</span><br><span class="line">        dir(<span class="string">&#x27;demo&#x27;</span>)&#123;</span><br><span class="line">            // 创建并切换到 /workspace/demo 目录下</span><br><span class="line">            // git <span class="built_in">clone</span>, credentialsId 需预先在 jenkins 中配置</span><br><span class="line">            git branch: <span class="string">&#x27;develop&#x27;</span>,</span><br><span class="line">            url: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">            credentialsId: <span class="string">&#x27;&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        // 自动回到工作目录</span><br><span class="line">        dir(<span class="string">&quot;demolib&quot;</span>)&#123;</span><br><span class="line">            // 创建并切换到 /workspace/demolib 目录下 </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><strong>Jenkins pipeline 里执行 shell 脚本注意事项</strong>：</li>
+</ol>
+<ul>
+<li>插入 pipeline 中定义的变量，需要用 <code>&#39;&#39;&#39;+variable+&#39;&#39;&#39;</code>方式插入：  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">node &#123;</span><br><span class="line">    def f = <span class="string">&quot;rtm&quot;</span></span><br><span class="line">    stage(<span class="string">&#x27;Build&#x27;</span>)&#123;</span><br><span class="line">        sh <span class="string">&#x27;&#x27;</span><span class="string">&#x27;</span></span><br><span class="line"><span class="string">            </span></span><br><span class="line"><span class="string">            ./gradlew &#x27;</span><span class="string">&#x27;&#x27;</span>+f+<span class="string">&#x27;&#x27;</span><span class="string">&#x27;Release</span></span><br><span class="line"><span class="string">        &#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.jenkins.io/doc/book/pipeline/">pipeline 简介</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jenkins.io/doc/pipeline/examples/">pipeline examples</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline">Pipeline Syntax</a></li>
+<li><a target="_blank" rel="noopener" href="https://prashix.medium.com/trigger-jenkins-pipeline-for-new-tags-in-github-repo-7724414e459">Trigger Jenkins pipeline for new tags in Github Repo</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/faun/a-hacky-hackers-guide-to-hacking-together-jenkins-scripted-pipelines-part-3-aca73bd33eaa">Medium - Guide To Hacking Together Jenkins Scripted Pipeline</a></li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/03/Python 爬虫的管理与定时任务/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Python 爬虫的管理与定时任务
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:edenxio.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Eden</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2021 Xio<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

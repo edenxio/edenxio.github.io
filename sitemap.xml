@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://edenxio.github.io/2020/09/12/Groovy%20%E5%92%8C%20Jenkins%20pipeline/</loc>
+    
+    <lastmod>2021-07-13</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://edenxio.github.io/2020/05/03/Python%20%E7%88%AC%E8%99%AB%E7%9A%84%E7%AE%A1%E7%90%86%E4%B8%8E%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/</loc>
     
     <lastmod>2021-07-12</lastmod>
@@ -53,7 +60,7 @@
 
   <url>
     <loc>http://edenxio.github.io/</loc>
-    <lastmod>2021-07-12</lastmod>
+    <lastmod>2021-07-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -61,49 +68,49 @@
   
   <url>
     <loc>http://edenxio.github.io/tags/Android/</loc>
-    <lastmod>2021-07-12</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://edenxio.github.io/tags/Kotlin/</loc>
-    <lastmod>2021-07-12</lastmod>
+    <lastmod>2021-07-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://edenxio.github.io/tags/Bluetooth/</loc>
-    <lastmod>2021-07-12</lastmod>
+    <lastmod>2021-07-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://edenxio.github.io/tags/Kotlin/</loc>
+    <lastmod>2021-07-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://edenxio.github.io/tags/Python/</loc>
-    <lastmod>2021-07-12</lastmod>
+    <lastmod>2021-07-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://edenxio.github.io/tags/Scrapy/</loc>
-    <lastmod>2021-07-12</lastmod>
+    <lastmod>2021-07-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://edenxio.github.io/tags/%E7%88%AC%E8%99%AB/</loc>
-    <lastmod>2021-07-12</lastmod>
+    <lastmod>2021-07-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://edenxio.github.io/tags/Java/</loc>
-    <lastmod>2021-07-12</lastmod>
+    <lastmod>2021-07-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -112,14 +119,14 @@
   
   <url>
     <loc>http://edenxio.github.io/categories/Python/</loc>
-    <lastmod>2021-07-12</lastmod>
+    <lastmod>2021-07-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>http://edenxio.github.io/categories/Python/io/</loc>
-    <lastmod>2021-07-12</lastmod>
+    <lastmod>2021-07-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
