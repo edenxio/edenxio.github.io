@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android 11 的存储升级和迁移 | Eden</title>
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Android 11 正式发布至今已经有一段时间了，也有越来越多的设备升级或搭载了最新系统。Google 也要求 App 开发者将 targetSdkVersion 升级到 30，并给出了 deadline（今年下半年）。在 TargetSdkVersion 迁移过程中感知最大的改动是存储，api 30 要求必须适配 Scope Storage。 Scope Storage 是什么Scope St">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 11 的存储升级和迁移">
+<meta property="og:url" content="http://edenxio.github.io/2021/04/06/Android%2011%20%E7%9A%84%E5%AD%98%E5%82%A8%E5%8D%87%E7%BA%A7%E5%92%8C%E8%BF%81%E7%A7%BB/index.html">
+<meta property="og:site_name" content="Eden">
+<meta property="og:description" content="Android 11 正式发布至今已经有一段时间了，也有越来越多的设备升级或搭载了最新系统。Google 也要求 App 开发者将 targetSdkVersion 升级到 30，并给出了 deadline（今年下半年）。在 TargetSdkVersion 迁移过程中感知最大的改动是存储，api 30 要求必须适配 Scope Storage。 Scope Storage 是什么Scope St">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-19T02:48:32.165Z">
+<meta property="article:author" content="Xio">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Eden" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-134333276-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">Eden</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">首页</a></li><li><a href="/archives">归档</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://edenxio.github.io"></form>
+	</div>
+</header>
+    <div id="main">
+      <article id="post-Android 11 的存储升级和迁移" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2021/04/06/Android 11 的存储升级和迁移/" class="article-date">
+  <time datetime="2021-04-05T16:00:00.000Z" itemprop="datePublished">2021-04-06</time>
+</a>
+		</span>
+		<span class="meta-elements author">Xio</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 class="article-title entry-title" itemprop="name">
+      Android 11 的存储升级和迁移
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+    	<p>Android 11 正式发布至今已经有一段时间了，也有越来越多的设备升级或搭载了最新系统。Google 也要求 App 开发者将 targetSdkVersion 升级到 30，并给出了 deadline（今年下半年）。在 TargetSdkVersion 迁移过程中感知最大的改动是存储，api 30 要求必须适配 <code>Scope Storage</code>。</p>
+<h2 id="Scope-Storage-是什么"><a href="#Scope-Storage-是什么" class="headerlink" title="Scope Storage 是什么"></a>Scope Storage 是什么</h2><p><code>Scope Storage</code> 最初在 Android 10 引入，但当时并不做强制要求，其目的是限制 App 对外部存储的随意访问。在此之前，App 为了能访问用户媒体数据会申请读写权限，用户授予权限之后 App 能做的其实不止于访问媒体数据，还可以获取外部存储的读写权限，这会导致很多问题，比如 App 可以随意的在外部存储中创建文件/目录，并且 App 在被卸载之后，这些创建在外部存储的数据依然会被保留，还可以随意读取其他 App 创建的数据，会导致很多数据安全问题等等，Android 普通用户对这些问题的抱怨由来已久，而 <code>Scope Storge</code> 就是 Google 给出的解决方案。</p>
+<p>其实际是一套存储要求和访问限制的规范，在其规范里：</p>
+<ul>
+<li>App 读写自己的文件不需要权限</li>
+<li>App 读取其他 App 的媒体文件需要 <code>READ_EXTERNAL_STORAGE</code> 权限</li>
+<li>App 只有在用户直接同意的情况下才能写入其他App的媒体文件（文件管理器/系统相册等除外，它们没有这个限制）</li>
+<li>不能访问其他 App 的外部存储数据目录</li>
+</ul>
+<p>可以发现，正如其字面意思，Scope Storage 的思路就是先把 App 的读写权限限制在自己的范围，然后再看 App 通常有哪些<strong>合理</strong>的外部访问需求，并将这些需求相关的接口尽可能按最低访问限度开放。</p>
+<span id="more"></span>
+
+<h2 id="如何访问文件"><a href="#如何访问文件" class="headerlink" title="如何访问文件"></a>如何访问文件</h2><p>对应前文中给出的访问限制，Android 也给出了具体类型的 Api 使用方式：</p>
+<table>
+<thead>
+<tr>
+<th>文件类型</th>
+<th>访问方式</th>
+<th>权限要求</th>
+<th>其他 App 访问情况</th>
+<th>App卸载后, 文件是否删除</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>App 自己的文件</td>
+<td>getFilesDir()<br>/getExternalFilesDir()</td>
+<td>不需要权限</td>
+<td>不能访问</td>
+<td>是</td>
+</tr>
+<tr>
+<td>媒体类共享文件</td>
+<td>MediaStore API</td>
+<td>Android 11/10: <br>访问其他App创建的文件需要 <code>READ_EXTERNAL_STORAGE</code>，<br>Android 9及以下访问任意文件都需要权限</td>
+<td>申请权限后可以访问</td>
+<td>否</td>
+</tr>
+<tr>
+<td>文档/其他共享文件</td>
+<td>SAF<br>(Storage Access Framework)</td>
+<td>不需要权限</td>
+<td>可以通过 SAF 访问</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<p>表中前两行在前文访问限制规则中已经提及，在此不做补充说明。末行的“非媒体类共享文件”通过 SAF 访问也不需要权限，这个最常见的场景就是让用户通过文件选择器从设备下载目录选择一个文件读写的情况。</p>
+<p>SAF 是 Android 4.4 就引入的文件访问框架，可以方便和安全的把用户文件选择/读取的工作交与系统完成。关于 SAF 的 API 使用本文不过多讨论，详情可参看 <a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/providers/document-provider">官方文档</a>。</p>
+<h2 id="如何做迁移适配"><a href="#如何做迁移适配" class="headerlink" title="如何做迁移适配"></a>如何做迁移适配</h2><p>对于这么大的系统 API 改动，了解其在新系统上的使用方式只是一方面，更重要的是如何做好已有 App 的迁移升级工作。</p>
+<h3 id="无需特别适配"><a href="#无需特别适配" class="headerlink" title="无需特别适配"></a>无需特别适配</h3><p>  如果你的 App 对存储的读写仅限于自身的文件或者是通过系统文件选择器(i.e. SAF)访问文件，那几乎不需要做改动。</p>
+<pre><code>注意，这里“自身文件”仅限于通过`getFilesDir`/`getExternalFilesDir` 访问自身私有目录的情况。
+
+此外，如果还无需访问图库等媒体资源(其他App创建的)的话，那权限请求在 Android 11 也是不需要的，为保持仅申请必须权限的原则，可以做以下改动：
+
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">uses-permission</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">android:name</span>=<span class="string">&quot;android.permission.READ_EXTERNAL_STORAGE&quot;</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">android:maxSdkVersion</span>=<span class="string">&quot;29&quot;</span> /&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</code></pre>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>其他情况，诸如使用 <code>getExternalStorageDirectory</code> (此API已废弃) 去访问外部存储，就需要做适配了:</p>
+<p>先发布一个 targetApi 到 29及以下的版本，在这个版本中需要：</p>
+<ol>
+<li>如果是 target 到 29 的话，需要在 manifest 文件中添加 <code>android:requestLegacyExternalStorage=&quot;true&quot;</code>，这会让系统继续允许App 使用之前的方式访问外部存储。</li>
+<li>根据 App 的业务需求通过 File API 把存放在外部存储(<code>/sdcard/</code>)的私有文件迁移到 <code>getExternalFilesDir()</code> 返回的目录下</li>
+<li>共享的非媒体文件迁移到 <code>Downloads/</code> 路径下</li>
+<li>迁移完成后删除原文件夹</li>
+</ol>
+<p>迁移完成后，再发布一个 TargetApi 到 30 的版本即可。</p>
+<p>这个流程中需要注意的：</p>
+<ul>
+<li><p><code>requestLegacyExternalStorage</code> 在 targetApi 30 后无效，系统会直接忽视。</p>
+</li>
+<li><p>如果部分老旧版本 App 没有升级到这个 targetApi 29 的过渡版本，而是直接升级到 targetApi 30 的版本，且运行在 Android 11 的设备上，那该如何处理呢？</p>
+<p>  针对这种情况，API 30 提供了 <code>preserveLegacyStorage</code> 这个flag，设置为 true 之后，如果 App 是升级到 API 30 版本的话，那么<code>requestLegacyExternalStorage</code> 的设置依然有效，可以继续通过上诉流程完成迁移。</p>
+<p>  <em><code>preserveLegacyStorage</code> 仅对升级的 App 有效，对于首次安装，或者卸载重新安装无效。</em></p>
+</li>
+</ul>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/about/versions/11/privacy/storage#scoped-storage">Android Developer - Scoped Storage</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/distribute/best-practices/develop/target-sdk">Android Developer - Meet Google Play’s target API level requirement</a></li>
+</ul>
+
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/09/12/Groovy 和 Jenkins pipeline/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Groovy 和 Jenkins pipeline
+        
+      </div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+    </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:edenxio.github.io">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">Eden</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2021 Xio<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
+</footer>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

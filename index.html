@@ -59,6 +59,68 @@
     <div id="main">
       
   
+    <article id="post-Android 11 的存储升级和迁移" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2021/04/06/Android 11 的存储升级和迁移/" class="article-date">
+  <time datetime="2021-04-05T16:00:00.000Z" itemprop="datePublished">2021-04-06</time>
+</a>
+		</span>
+		<span class="meta-elements author">Xio</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
+  
+    <h1 itemprop="name" class="entry-title">
+      <a class="article-title" href="/2021/04/06/Android 11 的存储升级和迁移/">Android 11 的存储升级和迁移</a>
+    </h1>
+  
+
+	</header>
+	<div class="entry-content">
+		
+			<p>Android 11 正式发布至今已经有一段时间了，也有越来越多的设备升级或搭载了最新系统。Google 也要求 App 开发者将 targetSdkVersion 升级到 30，并给出了 deadline（今年下半年）。在 TargetSdkVersion 迁移过程中感知最大的改动是存储，api 30 要求必须适配 <code>Scope Storage</code>。</p>
+<h2 id="Scope-Storage-是什么"><a href="#Scope-Storage-是什么" class="headerlink" title="Scope Storage 是什么"></a>Scope Storage 是什么</h2><p><code>Scope Storage</code> 最初在 Android 10 引入，但当时并不做强制要求，其目的是限制 App 对外部存储的随意访问。在此之前，App 为了能访问用户媒体数据会申请读写权限，用户授予权限之后 App 能做的其实不止于访问媒体数据，还可以获取外部存储的读写权限，这会导致很多问题，比如 App 可以随意的在外部存储中创建文件/目录，并且 App 在被卸载之后，这些创建在外部存储的数据依然会被保留，还可以随意读取其他 App 创建的数据，会导致很多数据安全问题等等，Android 普通用户对这些问题的抱怨由来已久，而 <code>Scope Storge</code> 就是 Google 给出的解决方案。</p>
+<p>其实际是一套存储要求和访问限制的规范，在其规范里：</p>
+<ul>
+<li>App 读写自己的文件不需要权限</li>
+<li>App 读取其他 App 的媒体文件需要 <code>READ_EXTERNAL_STORAGE</code> 权限</li>
+<li>App 只有在用户直接同意的情况下才能写入其他App的媒体文件（文件管理器/系统相册等除外，它们没有这个限制）</li>
+<li>不能访问其他 App 的外部存储数据目录</li>
+</ul>
+<p>可以发现，正如其字面意思，Scope Storage 的思路就是先把 App 的读写权限限制在自己的范围，然后再看 App 通常有哪些<strong>合理</strong>的外部访问需求，并将这些需求相关的接口尽可能按最低访问限度开放。</p>
+			
+				<p class="article-more-link">
+					<a href="/2021/04/06/Android 11 的存储升级和迁移/#more">继续阅读</a>
+				</p>
+      
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/" rel="tag">Android</a></li></ul>
+
+			</span>
+		</div>
+	</footer>
+	
+</article>
+
+
+	<hr class="article-devider">
+
+
+
+  
     <article id="post-Groovy 和 Jenkins pipeline" class="post">
 	<footer class="entry-meta-header">
 		<span class="meta-elements date">
